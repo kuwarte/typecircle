@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useState } from "react";
+import { FaGithub } from "react-icons/fa";
 
 export function LoginForm({
   className,
@@ -52,7 +53,14 @@ export function LoginForm({
             <div className="flex flex-col gap-6">
               {error && <p className="text-sm text-destructive-500">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Continue with GitHub"}
+                {isLoading ? (
+                  "Logging in..."
+                ) : (
+                  <>
+                    <FaGithub size={18} />
+                    {"Continue with GitHub"}
+                  </>
+                )}
               </Button>
             </div>
           </form>

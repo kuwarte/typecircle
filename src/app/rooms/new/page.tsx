@@ -9,38 +9,40 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-
 import {
   Field,
+  FieldContent,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { LoadingSwap } from "@/components/ui/loading-swap";
+import { createRoom } from "@/services/supabase/actions/rooms";
+import { createRoomSchema } from "@/services/supabase/schemas/rooms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
-const formSchema = z.object({
-  name: z.string().min(1).trim(),
-  isPublic: z.boolean(),
-});
-
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<typeof createRoomSchema>;
 
 export default function NewRoomPage() {
   const form = useForm<FormData>({
     defaultValues: {
       name: "",
-      isPublic: true,
+      isPublic: false,
     },
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createRoomSchema),
   });
 
-  function handleSubmit(data: FormData) {
-    console.log(data);
+  async function handleSubmit(data: FormData) {
+    const { error, message } = await createRoom(data);
+
+    if (error) {
+      toast.error(message);
+    }
   }
 
   return (
@@ -70,6 +72,7 @@ export default function NewRoomPage() {
                   </Field>
                 )}
               />
+
               <Controller
                 name="isPublic"
                 control={form.control}
@@ -88,10 +91,14 @@ export default function NewRoomPage() {
                       onCheckedChange={onChange}
                       aria-invalid={fieldState.invalid}
                     />
-                    <FieldLabel htmlFor={field.name}>Public Room</FieldLabel>
-                    {fieldState.error && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
+                    <FieldContent>
+                      <FieldLabel className="font-normal" htmlFor={field.name}>
+                        Public Room
+                      </FieldLabel>
+                      {fieldState.error && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </FieldContent>
                   </Field>
                 )}
               />
