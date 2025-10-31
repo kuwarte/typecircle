@@ -51,7 +51,12 @@ export function RoomClient({
     <div className="container mx-auto h-screen-with-header border border-y-0 flex flex-col max-w-200 border-none">
       <div className="flex items-center justify-between gap-2 p-4 bg-card/50 mt-2 mx-2 rounded-md outline outline-card-border">
         <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-bold">{room.name}</h1>
+          <h1
+            className="text-2xl font-bold text-shadow-md"
+            style={{ color: "var(--typecircle-green)" }}
+          >
+            {room.name}
+          </h1>
           <p className="text-muted-foreground text-sm italic rounded-md px-2 inline-flex items-center gap-1">
             <FaCircle size={12} color={connectedUsers > 1 ? "green" : "gray"} />
             {connectedUsers} {connectedUsers === 1 ? "user" : "users"} online
