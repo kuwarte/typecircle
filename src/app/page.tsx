@@ -59,7 +59,7 @@ export default async function Home() {
 
   return (
     <div className="container mx-auto px-8 py-16 space-y-8">
-      <div className="min-h-[calc(100vh-14rem)] space-y-8 border border-foreground bg-background shadow-md shadow-foreground p-6 rounded-sm">
+      <div className="min-h-[calc(100vh-14rem)] space-y-8 outline outline-card-border bg-card/50 shadow-md p-6 rounded-sm">
         <RoomList title="Your Rooms" rooms={joinedRooms} isJoined />
         <RoomList
           title="Public Rooms"
@@ -119,7 +119,9 @@ function RoomCard({
       <CardHeader>
         <CardTitle>{name}</CardTitle>
         <CardDescription>
-          {memberCount} {memberCount === 1 ? "member" : "members"}
+          <i className="text-sm ml-1 text-muted-foreground">
+            {memberCount} {memberCount === 1 ? "member" : "members"}
+          </i>
         </CardDescription>
       </CardHeader>
       <CardFooter className="gap-2">

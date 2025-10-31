@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Message } from "@/services/supabase/actions/messages";
 import { createClient } from "@/services/supabase/client";
 import { useEffect, useState } from "react";
+import { FaCircle } from "react-icons/fa";
 
 export function RoomClient({
   room,
@@ -48,10 +49,11 @@ export function RoomClient({
 
   return (
     <div className="container mx-auto h-screen-with-header border border-y-0 flex flex-col max-w-200 border-none">
-      <div className="flex items-center justify-between gap-2 p-4">
-        <div className="border-b">
+      <div className="flex items-center justify-between gap-2 p-4 bg-card/50 mt-2 mx-2 rounded-md outline outline-card-border">
+        <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-bold">{room.name}</h1>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-sm italic rounded-md px-2 inline-flex items-center gap-1">
+            <FaCircle size={12} color={connectedUsers > 1 ? "green" : "gray"} />
             {connectedUsers} {connectedUsers === 1 ? "user" : "users"} online
           </p>
         </div>

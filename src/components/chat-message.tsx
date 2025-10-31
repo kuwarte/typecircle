@@ -23,7 +23,7 @@ export function ChatMessage({
     <div
       ref={ref}
       className={cn(
-        "flex gap-4 my-2 px-4 py-2 bg-background rounded-sm text-foreground hover:bg-accent/50",
+        "flex gap-4 my-2 px-4 py-2 bg-card/20 outline outline-card-line rounded-sm text-foreground hover:bg-accent/50",
         status === "pending" && "opacity-70",
         status === "error" && "bg-destructive/10 text-destructive"
       )}
