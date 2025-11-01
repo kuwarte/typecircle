@@ -17,26 +17,50 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [githubLoading, setGithubLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [githubError, setGithubError] = useState<string | null>(null);
+  const [googleError, setGoogleError] = useState<string | null>(null);
 
-  const handleSocialLogin = async (provider: "github" | "google") => {
+  const handleGithubLogin = async () => {
     const supabase = createClient();
-    setIsLoading(true);
-    setError(null);
+    setGithubLoading(true);
+    setGithubError(null);
 
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider,
+        provider: "github",
         options: {
           redirectTo: `${window.location.origin}/auth/oauth?next=/`,
         },
       });
-
       if (error) throw error;
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
-      setIsLoading(false);
+      setGithubError(
+        error instanceof Error ? error.message : "An error occurred"
+      );
+      setGithubLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    const supabase = createClient();
+    setGoogleLoading(true);
+    setGoogleError(null);
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/oauth?next=/`,
+        },
+      });
+      if (error) throw error;
+    } catch (error: unknown) {
+      setGoogleError(
+        error instanceof Error ? error.message : "An error occurred"
+      );
+      setGoogleLoading(false);
     }
   };
 
@@ -49,16 +73,16 @@ export function LoginForm({
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">
-            {error && <p className="text-sm text-destructive-500">{error}</p>}
-
-            {/* GitHub Button */}
+            {githubError && (
+              <p className="text-sm text-destructive-500">{githubError}</p>
+            )}
             <Button
               type="button"
               className="w-full flex items-center justify-center gap-2"
-              onClick={() => handleSocialLogin("github")}
-              disabled={isLoading}
+              onClick={handleGithubLogin}
+              disabled={githubLoading}
             >
-              {isLoading ? (
+              {githubLoading ? (
                 "Logging in..."
               ) : (
                 <>
@@ -67,14 +91,16 @@ export function LoginForm({
               )}
             </Button>
 
-            {/* Google Button */}
+            {googleError && (
+              <p className="text-sm text-destructive-500">{googleError}</p>
+            )}
             <Button
               type="button"
               className="w-full flex items-center justify-center gap-2"
-              onClick={() => handleSocialLogin("google")}
-              disabled={isLoading}
+              onClick={handleGoogleLogin}
+              disabled={googleLoading}
             >
-              {isLoading ? (
+              {googleLoading ? (
                 "Logging in..."
               ) : (
                 <>
