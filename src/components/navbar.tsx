@@ -17,7 +17,7 @@ export default function Navbar() {
   return (
     <>
       <div className="fixed shadow-lg bg-card/50 h-header outline outline-card-border z-999 w-full">
-        <nav className="container mx-auto px-4 flex justify-between items-center h-full gap-4">
+        <nav className="container mx-auto md:px-4 flex justify-between items-center h-full gap-4">
           <Link
             href="/"
             className="hidden md:flex items-center text-xl font-bold gap-1"
