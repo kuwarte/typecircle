@@ -9,7 +9,7 @@ export function ChatButton() {
     <Link href="/rooms" passHref>
       <Button size="sm" variant="default" className="flex items-center gap-2">
         <MessageCircle className="w-4 h-4" />
-        Chat
+        <p className="hidden md:inline">Chat</p>
       </Button>
     </Link>
   );

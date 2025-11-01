@@ -22,7 +22,7 @@ export function UserProfileModal({ user }: { user: any }) {
       <DialogTrigger asChild>
         <Button size="sm" variant="outline" className="gap-2">
           <User2Icon className="w-4 h-4" />
-          <p className="md:inline">Profile</p>
+          <p className="hidden md:inline">Profile</p>
         </Button>
       </DialogTrigger>
 
