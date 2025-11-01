@@ -43,14 +43,16 @@ export function ChatMessage({
           </div>
         )}
       </div>
-      <div className="grow space-y-0.5">
+      <div className="grow space-y-0.5 min-w-0">
         <div className="flex items-baseline gap-2">
           <span className="text-sm font-semibold">{author?.name}</span>
           <span className="text-xs text-muted-foreground">
             {DATE_FORMATTER.format(new Date(created_at))}
           </span>
         </div>
-        <p className="text-sm wrap-break-words whitespace-pre">{text}</p>
+        <p className="text-sm break-words whitespace-pre-wrap break-all overflow-visible">
+          {text}
+        </p>
       </div>
     </div>
   );

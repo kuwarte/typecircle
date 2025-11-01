@@ -113,7 +113,7 @@ export default function NewRoomPage() {
                   </LoadingSwap>
                 </Button>
                 <Button variant="outline" asChild>
-                  <Link href="/">Cancel</Link>
+                  <Link href="/rooms">Cancel</Link>
                 </Button>
               </Field>
             </FieldGroup>

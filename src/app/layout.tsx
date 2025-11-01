@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import PageProgress from "@/components/page-progress";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
+          <PageProgress />
           <main className="pt-16 min-h-[calc(100vh-4rem)]">{children}</main>
           <Toaster />
         </ThemeProvider>

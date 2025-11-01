@@ -137,7 +137,7 @@ function RoomCard({
             <Button asChild className="grow" size="sm">
               <Link href={`/rooms/${id}`}>Enter</Link>
             </Button>
-            <LeaveRoomButton roomId={id} size="sm" variant="destructive">
+            <LeaveRoomButton roomId={id} size="sm" variant="default">
               Leave
             </LeaveRoomButton>
           </>

@@ -65,7 +65,7 @@ export function RoomClient({
         <InviteUserModal roomId={room.id} />
       </div>
       <div
-        className="grow overflow-y-auto flex flex-col-reverse"
+        className="grow overflow-y-auto flex flex-col-reverse mb-[5.5rem]"
         style={{
           scrollbarWidth: "thin",
           scrollbarColor: "var(--border) transparent",
@@ -96,41 +96,46 @@ export function RoomClient({
           ))}
         </div>
       </div>
-      <ChatInput
-        roomId={room.id}
-        onSend={(message) => {
-          setSentMessages((prev) => [
-            ...prev,
-            {
-              id: message.id,
-              text: message.text,
-              created_at: new Date().toISOString(),
-              author_id: user.id,
-              author: {
-                name: user.name,
-                image_url: user.image_url,
-              },
-              status: "pending",
-            },
-          ]);
-        }}
-        onSuccessfulSend={(message) => {
-          setSentMessages((prev) =>
-            prev.map((m) =>
-              m.id === message.id ? { ...message, status: "success" } : m
-            )
-          );
-        }}
-        onErrorSend={(id) => {
-          setSentMessages((prev) =>
-            prev.map((m) => (m.id === id ? { ...m, status: "error" } : m))
-          );
-        }}
-      />
+      <div className="fixed bottom-0 left-0 right-0 z-50">
+        <div className="max-w-200 mx-auto p-2">
+          <ChatInput
+            roomId={room.id}
+            onSend={(message) => {
+              setSentMessages((prev) => [
+                ...prev,
+                {
+                  id: message.id,
+                  text: message.text,
+                  created_at: new Date().toISOString(),
+                  author_id: user.id,
+                  author: {
+                    name: user.name,
+                    image_url: user.image_url,
+                  },
+                  status: "pending",
+                },
+              ]);
+            }}
+            onSuccessfulSend={(message) => {
+              setSentMessages((prev) =>
+                prev.map((m) =>
+                  m.id === message.id ? { ...message, status: "success" } : m
+                )
+              );
+            }}
+            onErrorSend={(id) => {
+              setSentMessages((prev) =>
+                prev.map((m) => (m.id === id ? { ...m, status: "error" } : m))
+              );
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 }
-function useRealtimeChat({
+
+export function useRealtimeChat({
   roomId,
   userId,
 }: {
@@ -139,28 +144,34 @@ function useRealtimeChat({
 }) {
   const [connectedUsers, setConnectedUsers] = useState(1);
   const [messages, setMessages] = useState<Message[]>([]);
+  const supabase = createClient(); // ✅ stable client outside effect
 
   useEffect(() => {
-    const supabase = createClient();
+    let presenceChannel: ReturnType<typeof supabase.channel> | null = null;
+    let messageChannel: ReturnType<typeof supabase.channel> | null = null;
 
-    supabase.auth.getSession().then(({ data }) => {
+    async function setupRealtime() {
+      const { data } = await supabase.auth.getSession();
       if (!data.session) return;
 
-      const presenceChannel = supabase.channel(`room:${roomId}:presence`, {
+      presenceChannel = supabase.channel(`room:${roomId}:presence`, {
         config: { presence: { key: userId } },
       });
 
       presenceChannel
         .on("presence", { event: "sync" }, () => {
           setConnectedUsers(
-            Object.keys(presenceChannel.presenceState()).length
+            Object.keys(presenceChannel!.presenceState()).length
           );
         })
         .subscribe((status) => {
-          if (status === "SUBSCRIBED") presenceChannel.track({ userId });
+          if (status === "SUBSCRIBED") {
+            presenceChannel!.track({ userId });
+          }
         });
 
-      const messageChannel = supabase.channel(`room:${roomId}:messages`);
+      // --- Messages setup ---
+      messageChannel = supabase.channel(`room:${roomId}:messages`);
 
       messageChannel.on(
         "postgres_changes",
@@ -185,7 +196,6 @@ function useRealtimeChat({
                 image_url: record.author_image_url,
               },
             },
-            // prepend for flex-col-reverse
           ]);
         }
       );
@@ -193,13 +203,23 @@ function useRealtimeChat({
       messageChannel.subscribe((status) =>
         console.log("Message channel status:", status)
       );
+    }
 
-      return () => {
-        supabase.removeChannel(presenceChannel);
-        supabase.removeChannel(messageChannel);
-      };
+    setupRealtime();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") {
+        console.log("Realtime: user signed in, reconnecting...");
+        setupRealtime();
+      }
     });
-  }, [roomId, userId]);
+
+    return () => {
+      if (presenceChannel) supabase.removeChannel(presenceChannel);
+      if (messageChannel) supabase.removeChannel(messageChannel);
+      listener.subscription.unsubscribe();
+    };
+  }, [roomId, userId, supabase]);
 
   return { connectedUsers, messages };
 }

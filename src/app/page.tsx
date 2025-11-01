@@ -18,10 +18,10 @@ export default function Home() {
             typecircle
           </span>
         </h1>
-        <p className="flex items-center justify-center md:justify-start text-lg sm:text-xl text-muted-foreground gap-1">
+        <p className="flex items-center justify-center md:justify-start text-sm md:text-xl text-muted-foreground gap-1">
           Discover your{" "}
           <Link
-            href="/"
+            href="/enneagram/test"
             className="hover:underline"
             style={{ color: "var(--typecircle-green)" }}
           >
