@@ -58,7 +58,7 @@ export default async function Rooms() {
   }
 
   return (
-    <div className="container mx-auto px-8 py-16 space-y-8">
+    <div className="container mx-auto md:px-8 py-16 space-y-8">
       <div className="min-h-[calc(100vh-14rem)] space-y-8 outline outline-card-border bg-card/50 shadow-md p-6 rounded-sm">
         <RoomList title="Your Rooms" rooms={joinedRooms} isJoined />
         <RoomList
