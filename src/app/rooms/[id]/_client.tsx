@@ -144,7 +144,7 @@ export function useRealtimeChat({
 }) {
   const [connectedUsers, setConnectedUsers] = useState(1);
   const [messages, setMessages] = useState<Message[]>([]);
-  const supabase = createClient(); // ✅ stable client outside effect
+  const supabase = createClient();
 
   useEffect(() => {
     let presenceChannel: ReturnType<typeof supabase.channel> | null = null;
