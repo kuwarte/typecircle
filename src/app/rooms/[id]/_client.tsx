@@ -97,38 +97,46 @@ export function RoomClient({
         </div>
       </div>
       <div className="fixed bottom-0 left-0 right-0 z-50">
-        <div className="max-w-200 mx-auto p-2">
-          <ChatInput
-            roomId={room.id}
-            onSend={(message) => {
-              setSentMessages((prev) => [
-                ...prev,
-                {
-                  id: message.id,
-                  text: message.text,
-                  created_at: new Date().toISOString(),
-                  author_id: user.id,
-                  author: {
-                    name: user.name,
-                    image_url: user.image_url,
-                  },
-                  status: "pending",
-                },
-              ]);
-            }}
-            onSuccessfulSend={(message) => {
-              setSentMessages((prev) =>
-                prev.map((m) =>
-                  m.id === message.id ? { ...message, status: "success" } : m
-                )
-              );
-            }}
-            onErrorSend={(id) => {
-              setSentMessages((prev) =>
-                prev.map((m) => (m.id === id ? { ...m, status: "error" } : m))
-              );
-            }}
-          />
+        <div className="fixed bottom-0 left-0 right-0 z-50">
+          {room.id !== "3fc9aa8a-81b7-4a60-92ce-066dcd9baa45" && (
+            <div className="max-w-200 mx-auto p-2">
+              <ChatInput
+                roomId={room.id}
+                onSend={(message) => {
+                  setSentMessages((prev) => [
+                    ...prev,
+                    {
+                      id: message.id,
+                      text: message.text,
+                      created_at: new Date().toISOString(),
+                      author_id: user.id,
+                      author: {
+                        name: user.name,
+                        image_url: user.image_url,
+                      },
+                      status: "pending",
+                    },
+                  ]);
+                }}
+                onSuccessfulSend={(message) => {
+                  setSentMessages((prev) =>
+                    prev.map((m) =>
+                      m.id === message.id
+                        ? { ...message, status: "success" }
+                        : m
+                    )
+                  );
+                }}
+                onErrorSend={(id) => {
+                  setSentMessages((prev) =>
+                    prev.map((m) =>
+                      m.id === id ? { ...m, status: "error" } : m
+                    )
+                  );
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
