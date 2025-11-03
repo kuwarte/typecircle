@@ -77,7 +77,7 @@ export function AnimatedLink({
       href={href}
       className="flex items-center justify-center gap-2 h-full px-6 text-sm font-medium text-card-foreground 
                  transition-colors duration-150 
-                 hover:bg-[var(--typecircle-green)]/20 hover:text-foreground 
+                 hover:bg-[var(--typecircle-green)]/20 hover:text-foreground active:bg-[var(--typecircle-green)]/20 active:text-foreground
                  rounded-none m-0"
     >
       {children}
