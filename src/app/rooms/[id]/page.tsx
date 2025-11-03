@@ -32,7 +32,10 @@ async function getRoom(id: string) {
     .eq("chat_room_member.member_id", user.id)
     .single();
 
-  if (error) return null;
+  if (error) {
+    console.error("Error getRoom:", error);
+    return null;
+  }
   return room;
 }
 
@@ -47,7 +50,10 @@ async function getUser() {
     .eq("id", user.id)
     .single();
 
-  if (error) return null;
+  if (error) {
+    console.error("Error getUser:", error);
+    return null;
+  }
   return data;
 }
 
@@ -63,6 +69,9 @@ async function getMessages(roomId: string) {
     .order("created_at", { ascending: false })
     .limit(30);
 
-  if (error) return [];
+  if (error) {
+    console.error("Error getMessage:", error);
+    return [];
+  }
   return data;
 }

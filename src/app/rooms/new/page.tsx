@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { LoadingSwap } from "@/components/ui/loading-swap";
+import { Badge } from "@/components/ui/badge";
 import { createRoom } from "@/services/supabase/actions/rooms";
 import { createRoomSchema } from "@/services/supabase/schemas/rooms";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,30 +29,33 @@ import z from "zod";
 
 type FormData = z.infer<typeof createRoomSchema>;
 
+const TAG_OPTIONS = ["connect", "study", "enneagram", "art", "games"];
+
 export default function NewRoomPage() {
   const form = useForm<FormData>({
+    resolver: zodResolver(createRoomSchema) as any,
     defaultValues: {
       name: "",
       isPublic: false,
+      tags: [],
     },
-    resolver: zodResolver(createRoomSchema),
   });
 
   async function handleSubmit(data: FormData) {
     const { error, message } = await createRoom(data);
 
-    if (error) {
-      toast.error(message);
-    }
+    if (error) toast.error(message);
+    else toast.success("Room created successfully!");
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mt-10 mx-auto px-4 py-8">
       <Card className="w-full max-w-lg mx-auto">
         <CardHeader>
           <CardTitle>New Room</CardTitle>
           <CardDescription>Create a new chat room</CardDescription>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <FieldGroup>
@@ -72,6 +76,38 @@ export default function NewRoomPage() {
                   </Field>
                 )}
               />
+
+              <Field>
+                <FieldLabel>Tags</FieldLabel>
+                <div className="flex flex-wrap gap-2">
+                  {TAG_OPTIONS.map((tag) => {
+                    const selected = form.watch("tags").includes(tag);
+                    return (
+                      <label key={tag} className="cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          className="hidden"
+                          checked={selected}
+                          onChange={(e) => {
+                            const newTags = e.target.checked
+                              ? [...form.getValues("tags"), tag]
+                              : form.getValues("tags").filter((t) => t !== tag);
+                            form.setValue("tags", newTags);
+                          }}
+                        />
+                        <Badge
+                          variant="outline"
+                          className={`px-2 py-1 rounded-sm transition-colors duration-200 ${
+                            selected ? "bg-foreground text-card" : ""
+                          }`}
+                        >
+                          {tag}
+                        </Badge>
+                      </label>
+                    );
+                  })}
+                </div>
+              </Field>
 
               <Controller
                 name="isPublic"
@@ -102,6 +138,7 @@ export default function NewRoomPage() {
                   </Field>
                 )}
               />
+
               <Field orientation="horizontal" className="w-full">
                 <Button
                   type="submit"

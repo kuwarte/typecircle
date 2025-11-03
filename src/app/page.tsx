@@ -38,33 +38,46 @@ export default function Home() {
           with people.
         </p>
       </div>
-      <div className="min-h-100 bg-card/50 p-12 outline outline-card-border flex flex-col md:flex-row justify-center md:space-x-8 space-y-8 md:space-y-0 md:px-40">
-        <Card className="flex-1 p-6 text-center hover:shadow-lg transition-shadow pt-12">
-          <FaUser className="mx-auto mb-4 text-4xl text-primary" />
-          <h2 className="text-xl font-semibold mb-2">Discover Yourself</h2>
-          <p className="text-muted-foreground">
-            Take our Enneagram personality test to understand your type and
-            traits.
-          </p>
-        </Card>
-
-        <Card className="flex-1 p-6 text-center hover:shadow-lg transition-shadow pt-12">
-          <FaUsers className="mx-auto mb-4 text-4xl text-primary" />
-          <h2 className="text-xl font-semibold mb-2">Connect with Others</h2>
-          <p className="text-muted-foreground">
-            Meet people with similar personalities and join rooms that match
-            your type.
-          </p>
-        </Card>
-
-        <Card className="flex-1 p-6 text-center hover:shadow-lg transition-shadow pt-12">
-          <FaComments className="mx-auto mb-4 text-4xl text-primary" />
-          <h2 className="text-xl font-semibold mb-2">Chat & Share</h2>
-          <p className="text-muted-foreground">
-            Engage in conversations, share insights, and grow with the
-            community.
-          </p>
-        </Card>
+      <div className="min-h-100 bg-card/50 backdrop-blur-md outline outline-card-border p-12 flex flex-col md:flex-row justify-center md:space-x-8 space-y-8 md:space-y-0 md:px-40">
+        <div className="p-2 bg-card/90">
+          <Card className="hover:bg-[var(--typecircle-green)]/5 transition-bg min-h-full">
+            <div className="flex-1 p-6 text-center overflow-hidden  pt-12 hover:scale-[1.05] transition-transform">
+              <FaUser className="mx-auto mb-4 text-4xl text-primary" />
+              <h2 className="text-xl font-semibold mb-2">Discover Yourself</h2>
+              <p className="text-muted-foreground">
+                Take our Enneagram personality test to understand your type and
+                traits.
+              </p>
+            </div>
+          </Card>
+        </div>
+        <div className="p-2 bg-card/90">
+          <Card className="hover:bg-[var(--typecircle-green)]/5 transition-bg min-h-full">
+            <div className="flex-1 p-6 text-center overflow-hidden  pt-12 hover:scale-[1.05] transition-transform">
+              <FaUsers className="mx-auto mb-4 text-4xl text-primary" />
+              <h2 className="text-xl font-semibold mb-2">
+                Connect with Others
+              </h2>
+              <p className="text-muted-foreground">
+                Meet people with similar personalities and join rooms that match
+                your type.
+              </p>
+            </div>
+          </Card>
+        </div>
+        <div className="flex flex-col p-2 bg-card/90">
+          <Card className="hover:bg-[var(--typecircle-green)]/5 transition-bg min-h-full">
+            <div className="flex-1 p-6 text-center overflow-hidden  pt-12 hover:scale-[1.05] transition-transform">
+              <FaComments className="mx-auto mb-4 text-4xl text-primary" />
+              <h2 className="text-xl font-semibold mb-2">Chat & Share</h2>
+              <p className="text-muted-foreground">
+                Engage in conversations, share insights, and grow with the
+                community.
+              </p>
+            </div>
+          </Card>
+          <div className="outline"></div>
+        </div>
       </div>
     </>
   );

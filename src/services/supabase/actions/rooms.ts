@@ -22,7 +22,11 @@ export async function createRoom(unsafeData: z.infer<typeof createRoomSchema>) {
 
   const { data: room, error: roomError } = await supabase
     .from("chat_room")
-    .insert({ name: data.name, is_public: data.isPublic })
+    .insert({
+      name: data.name,
+      is_public: data.isPublic,
+      tags: data.tags ?? [],
+    })
     .select("id")
     .single();
 

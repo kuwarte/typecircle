@@ -22,6 +22,7 @@ import {
 import { LeaveRoomButton } from "@/components/leave-room-btn";
 import { JoinRoomButton } from "@/components/join-room-btn";
 import { FaPlus } from "react-icons/fa";
+import { Badge } from "@/components/ui/badge";
 
 export default async function Rooms() {
   const user = await getCurrentUser();
@@ -59,14 +60,16 @@ export default async function Rooms() {
 
   return (
     <div className="container mx-auto md:px-8 py-16 space-y-8">
-      <div className="min-h-[calc(100vh-14rem)] space-y-8 outline outline-card-border bg-card/50 shadow-md p-6 rounded-sm">
-        <RoomList title="Your Rooms" rooms={joinedRooms} isJoined />
-        <RoomList
-          title="Public Rooms"
-          rooms={publicRooms.filter(
-            (room) => !joinedRooms.some((r) => r.id === room.id)
-          )}
-        />
+      <div className="min-h-[calc(100vh-14rem)] bg-card/50 backdrop-blur-md shadow-md p-6">
+        <div className="outline outline-card-border p-6 space-y-8">
+          <RoomList title="Your Rooms" rooms={joinedRooms} isJoined />
+          <RoomList
+            title="Public Rooms"
+            rooms={publicRooms.filter(
+              (room) => !joinedRooms.some((r) => r.id === room.id)
+            )}
+          />
+        </div>
       </div>
     </div>
   );
@@ -78,7 +81,7 @@ function RoomList({
   isJoined = false,
 }: {
   title: string;
-  rooms: { id: string; name: string; memberCount: number }[];
+  rooms: { id: string; name: string; memberCount: number; tags: string[] }[];
   isJoined?: boolean;
 }) {
   if (rooms.length === 0) return null;
@@ -94,7 +97,7 @@ function RoomList({
           </Link>
         </Button>
       </div>
-      <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
+      <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
         {rooms.map((room) => (
           <RoomCard {...room} key={room.id} isJoined={isJoined} />
         ))}
@@ -102,42 +105,58 @@ function RoomList({
     </div>
   );
 }
-
 function RoomCard({
   id,
   name,
   memberCount,
+  tags,
   isJoined,
 }: {
   id: string;
   name: string;
   memberCount: number;
+  tags: string[];
   isJoined: boolean;
 }) {
   return (
-    <Card>
+    <Card className="bg-card/5 rounded-md">
       <CardHeader>
         <CardTitle>
           <h3
-            className="text-lg text-shadow-md"
+            className="text-lg text-shadow-md capitalize font-semibold"
             style={{ color: "var(--typecircle-green)" }}
           >
             {name}
           </h3>
         </CardTitle>
-        <CardDescription>
-          <i className="text-sm ml-1 text-muted-foreground">
+        <CardDescription className="flex flex-wrap gap-2">
+          <Badge variant="secondary" className="px-2 py-1 rounded-sm">
             {memberCount} {memberCount === 1 ? "member" : "members"}
-          </i>
+          </Badge>
+
+          {tags.map((tag) => (
+            <Badge
+              key={tag}
+              variant="outline"
+              className="px-2 py-1 rounded-sm capitalize"
+            >
+              {tag}
+            </Badge>
+          ))}
         </CardDescription>
       </CardHeader>
       <CardFooter className="gap-2">
         {isJoined ? (
           <>
-            <Button asChild className="grow" size="sm">
+            <Button asChild className="grow outline" size="sm">
               <Link href={`/rooms/${id}`}>Enter</Link>
             </Button>
-            <LeaveRoomButton roomId={id} size="sm" variant="default">
+            <LeaveRoomButton
+              className="rounded-sm"
+              roomId={id}
+              size="sm"
+              variant="default"
+            >
               Leave
             </LeaveRoomButton>
           </>
@@ -161,18 +180,19 @@ async function getPublicRooms() {
 
   const { data, error } = await supabase
     .from("chat_room")
-    .select("id, name, chat_room_member (count)")
+    .select("id, name, tags, chat_room_member (count)")
     .eq("is_public", true)
     .order("created_at", { ascending: true });
 
-  if (error) {
+  if (error || !data) {
     return [];
   }
 
-  return data.map((room) => ({
+  return (data as any[]).map((room) => ({
     id: room.id,
     name: room.name,
-    memberCount: room.chat_room_member[0].count,
+    memberCount: room.chat_room_member?.[0]?.count ?? 0,
+    tags: room.tags ?? [],
   }));
 }
 
@@ -181,18 +201,21 @@ async function getJoinedRooms(userId: string) {
 
   const { data, error } = await supabase
     .from("chat_room")
-    .select("id, name, chat_room_member (member_id)")
+    .select("id, name, tags, chat_room_member (member_id)")
     .order("created_at", { ascending: true });
 
-  if (error) {
+  if (error || !data) {
     return [];
   }
 
-  return data
-    .filter((room) => room.chat_room_member.some((u) => u.member_id === userId))
+  return (data as any[])
+    .filter((room) =>
+      (room.chat_room_member ?? []).some((u: any) => u.member_id === userId)
+    )
     .map((room) => ({
       id: room.id,
       name: room.name,
-      memberCount: room.chat_room_member.length,
+      memberCount: (room.chat_room_member ?? []).length,
+      tags: room.tags ?? [],
     }));
 }

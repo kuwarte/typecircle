@@ -2,22 +2,19 @@
 
 import { useCurrentUser } from "@/services/supabase/hooks/useCurrentUser";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { LogoutButton } from "@/services/supabase/components/logout-button";
 import { ModeToggle } from "./toggle-theme-btn";
 import { FaRegCircle } from "react-icons/fa";
 import { UserProfileModal } from "./user-profile";
-import { ChatButton } from "./chat-button";
-import { HomeButton } from "./home-button";
-import { TypeButton } from "./type-button";
+import { Button } from "./ui/button";
+import { Edit3, Home, MessageCircle } from "lucide-react";
 
 export default function Navbar() {
   const { user, isLoading } = useCurrentUser();
 
   return (
-    <>
-      <div className="fixed shadow-lg bg-card/50 h-header outline outline-card-border z-999 w-full">
-        <nav className="container mx-auto px-2 md:px-4 flex justify-between items-center h-full gap-4">
+    <header className="fixed top-0 left-0 w-full z-50 shadow-lg">
+      <div className="bg-card/60 backdrop-blur-md outline outline-card-border">
+        <div className="container mx-auto px-4 h-header flex justify-between items-center">
           <Link
             href="/"
             className="hidden md:flex items-center text-xl font-bold gap-1"
@@ -33,51 +30,57 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {isLoading || !user ? (
-            <div className="flex items-center w-full justify-between md:justify-end gap-2">
-              <div className="flex items-center gap-2">
-                <HomeButton />
-                <TypeButton />
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Button asChild>
-                  <Link href="/auth/login">Sign In</Link>
-                </Button>
-                <ModeToggle />
-              </div>
-            </div>
-          ) : (
-            <div className="flex items-center w-full justify-between md:justify-end gap-2">
-              <div className="flex items-center gap-2">
-                <HomeButton />
-                <TypeButton />
-                <ChatButton />
-                <UserProfileModal user={user} />
-              </div>
-
-              <div>
-                <ModeToggle />
-              </div>
-            </div>
-          )}
-        </nav>
+          <div className="flex items-center gap-4">
+            {isLoading || !user ? (
+              <Button asChild>
+                <Link href="/auth/login">Sign In</Link>
+              </Button>
+            ) : (
+              <UserProfileModal user={user} />
+            )}
+            <ModeToggle />
+          </div>
+        </div>
       </div>
 
-      {/* <div className="md:hidden fixed top-0 left-0 right-0 z-999 bg-card/80 backdrop-blur-md border-t border-card-border flex justify-center items-center h-14">
-        {user ? (
-          <>
-            <HomeButton />
-            <TypeButton />
-            <ChatButton />
-            <UserProfileModal user={user} />
-          </>
-        ) : (
-          <Button asChild className="w-full">
-            <Link href="/auth/login">Sign In</Link>
-          </Button>
-        )}
-      </div> */}
-    </>
+      <div className="bg-card/50 backdrop-blur-md border-t border-border">
+        <div className="container mx-auto md:px-10 h-8 flex justify-start items-center">
+          <AnimatedLink href="/">
+            <Home className="w-4 h-4" />
+            Home
+          </AnimatedLink>
+          <AnimatedLink href="/enneagram/test">
+            <Edit3 className="w-4 h-4" />
+            Test
+          </AnimatedLink>
+          {user && (
+            <AnimatedLink href="/rooms">
+              <MessageCircle className="w-4 h-4" />
+              Chat
+            </AnimatedLink>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export function AnimatedLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className="flex items-center justify-center gap-2 h-full px-6 text-sm font-medium text-card-foreground 
+                 transition-colors duration-150 
+                 hover:bg-[var(--typecircle-green)]/20 hover:text-foreground 
+                 rounded-none m-0"
+    >
+      {children}
+    </Link>
   );
 }

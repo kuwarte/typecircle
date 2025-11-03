@@ -26,7 +26,7 @@ export async function sendMessage(data: {
   if (!data.text.trim())
     return { error: true, message: "Message cannot be empty" };
 
-  const supabase = await createClient(); // ✅ use the user client here
+  const supabase = await createClient();
 
   const { data: membership, error: membershipError } = await supabase
     .from("chat_room_member")

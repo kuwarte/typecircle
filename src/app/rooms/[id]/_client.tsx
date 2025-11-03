@@ -48,7 +48,7 @@ export function RoomClient({
   );
 
   return (
-    <div className="container mx-auto h-screen-with-header border border-y-0 flex flex-col max-w-200 border-none">
+    <div className="container mx-auto mt-8 h-screen-with-header border border-y-0 flex flex-col max-w-200 border-none">
       <div className="flex items-center justify-between gap-2 p-4 bg-card/50 mt-2 mx-2 rounded-md outline outline-card-border">
         <div className="flex flex-col gap-1">
           <h1
