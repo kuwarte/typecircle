@@ -8,6 +8,7 @@ export type Message = {
   text: string;
   created_at: string;
   author_id: string;
+  reply_to?: string | null;
   author: {
     name: string;
     image_url: string | null;
@@ -18,6 +19,7 @@ export async function sendMessage(data: {
   id: string;
   text: string;
   roomId: string;
+  replyTo?: string;
 }): Promise<
   { error: false; message: Message } | { error: true; message: string }
 > {
@@ -45,6 +47,7 @@ export async function sendMessage(data: {
       text: data.text.trim(),
       chat_room_id: data.roomId,
       author_id: user.id,
+      reply_to: data.replyTo,
     })
     .select(
       "id, text, created_at, author_id, author:user_profile (name, image_url)"

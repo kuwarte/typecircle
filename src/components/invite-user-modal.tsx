@@ -57,16 +57,18 @@ export function InviteUserModal({ roomId }: { roomId: string }) {
           Invite User
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Invite User to Room</DialogTitle>
-          <DialogDescription>
-            Enter the user ID of the person you want to invite to this chat
-            room.
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup>
+      <DialogContent className="sm:max-w-md bg-background/98 backdrop-blur-xl border border-border">
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--typecircle-green)]/5 via-transparent to-blue-500/5 pointer-events-none rounded-lg" />
+        <div className="relative z-10">
+          <DialogHeader>
+            <DialogTitle className="text-foreground">Invite User to Room</DialogTitle>
+            <DialogDescription className="text-foreground/70 dark:text-muted-foreground">
+              Enter the user ID of the person you want to invite to this chat
+              room.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
             <Controller
               name="userId"
               control={form.control}
@@ -103,8 +105,9 @@ export function InviteUserModal({ roomId }: { roomId: string }) {
                 Close
               </Button>
             </Field>
-          </FieldGroup>
-        </form>
+            </FieldGroup>
+          </form>
+        </div>
       </DialogContent>
     </Dialog>
   );

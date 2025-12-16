@@ -41,6 +41,12 @@ export function RoomClient({
   const [sentMessages, setSentMessages] = useState<
     (Message & { status: "pending" | "error" | "success" })[]
   >([]);
+  const [replyTo, setReplyTo] = useState<{
+    id: string;
+    author: string;
+    text: string;
+  } | null>(null);
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
 
   const visibleMessages = oldMessages.concat(
     realtimeMessages,
@@ -48,97 +54,140 @@ export function RoomClient({
   );
 
   return (
-    <div className="container mx-auto mt-8 h-screen-with-header border border-y-0 flex flex-col max-w-200 border-none">
-      <div className="flex items-center justify-between gap-2 p-4 bg-card/50 mt-2 mx-2 rounded-md outline outline-card-border">
-        <div className="flex flex-col gap-1">
-          <h1
-            className="text-2xl font-bold text-shadow-md"
-            style={{ color: "var(--typecircle-green)" }}
-          >
-            {room.name}
-          </h1>
-          <p className="text-muted-foreground text-sm italic rounded-md px-2 inline-flex items-center gap-1">
-            <FaCircle size={12} color={connectedUsers > 1 ? "green" : "gray"} />
-            {connectedUsers} {connectedUsers === 1 ? "user" : "users"} online
-          </p>
-        </div>
-        <InviteUserModal roomId={room.id} />
-      </div>
-      <div
-        className="grow overflow-y-auto flex flex-col-reverse mb-[5.5rem]"
-        style={{
-          scrollbarWidth: "thin",
-          scrollbarColor: "var(--border) transparent",
-        }}
-      >
-        <div className="px-4">
-          {status === "loading" && (
-            <p className="text-center text-sm text-muted-foreground py-2">
-              Loading more messages...
-            </p>
-          )}
-          {status === "error" && (
-            <div className="text-center">
-              <p className="text-sm text-destructive py-2">
-                Error loading messages.
-              </p>
-              <Button onClick={loadMoreMessages} variant="outline">
-                Retry
-              </Button>
-            </div>
-          )}
-          {visibleMessages.map((message, index) => (
-            <ChatMessage
-              key={message.id}
-              {...message}
-              ref={index === 0 && status === "idle" ? triggerQueryRef : null}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="fixed bottom-0 left-0 right-0 z-50">
-        <div className="fixed bottom-0 left-0 right-0 z-50">
-          {room.id !== "3fc9aa8a-81b7-4a60-92ce-066dcd9baa45" && (
-            <div className="max-w-200 mx-auto p-2">
-              <ChatInput
-                roomId={room.id}
-                onSend={(message) => {
-                  setSentMessages((prev) => [
-                    ...prev,
-                    {
-                      id: message.id,
-                      text: message.text,
-                      created_at: new Date().toISOString(),
-                      author_id: user.id,
-                      author: {
-                        name: user.name,
-                        image_url: user.image_url,
-                      },
-                      status: "pending",
-                    },
-                  ]);
-                }}
-                onSuccessfulSend={(message) => {
-                  setSentMessages((prev) =>
-                    prev.map((m) =>
-                      m.id === message.id
-                        ? { ...message, status: "success" }
-                        : m
-                    )
-                  );
-                }}
-                onErrorSend={(id) => {
-                  setSentMessages((prev) =>
-                    prev.map((m) =>
-                      m.id === id ? { ...m, status: "error" } : m
-                    )
-                  );
-                }}
+    <div className="h-[calc(100vh-4rem)] flex flex-col">
+      <div className="glass-navbar border-b border-border px-6 py-4 shrink-0">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-foreground capitalize">
+              {room.name}
+            </h1>
+            <div className="flex items-center gap-1 mt-1">
+              <FaCircle
+                size={6}
+                className={`${
+                  connectedUsers > 1 ? "text-green-500" : "text-gray-400"
+                }`}
               />
+              <span className="text-sm text-muted-foreground">
+                {connectedUsers} {connectedUsers === 1 ? "user" : "users"}{" "}
+                online
+              </span>
             </div>
-          )}
+          </div>
+          <InviteUserModal roomId={room.id} />
         </div>
       </div>
+
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full max-w-4xl mx-auto px-6">
+          <div
+            className="h-full overflow-y-auto flex flex-col-reverse py-4"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "var(--border) transparent",
+            }}
+          >
+            <div className="space-y-4">
+              {status === "loading" && (
+                <div className="text-center py-4">
+                  <div className="glass-subtle rounded-xl px-4 py-2 inline-block">
+                    <p className="text-sm text-muted-foreground">
+                      Loading more messages...
+                    </p>
+                  </div>
+                </div>
+              )}
+              {status === "error" && (
+                <div className="text-center py-4">
+                  <div className="glass-subtle rounded-xl p-4 inline-block">
+                    <p className="text-sm text-destructive mb-2">
+                      Error loading messages.
+                    </p>
+                    <Button
+                      onClick={loadMoreMessages}
+                      variant="outline"
+                      size="sm"
+                      className="glass-button"
+                    >
+                      Retry
+                    </Button>
+                  </div>
+                </div>
+              )}
+              {visibleMessages.map((message, index) => (
+                <ChatMessage
+                  key={message.id}
+                  {...message}
+                  ref={
+                    index === 0 && status === "idle" ? triggerQueryRef : null
+                  }
+                  onReply={(msg) =>
+                    setReplyTo({
+                      id: msg.id,
+                      author: msg.author?.name || "User",
+                      text: msg.text,
+                    })
+                  }
+                />
+              ))}
+
+              {typingUsers.length > 0 && (
+                <div className="px-4 py-2">
+                  <div className="glass-subtle rounded-xl px-4 py-2 inline-block">
+                    <span className="text-sm text-muted-foreground">
+                      {typingUsers.join(", ")}{" "}
+                      {typingUsers.length === 1 ? "is" : "are"} typing...
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {room.id !== "3fc9aa8a-81b7-4a60-92ce-066dcd9baa45" && (
+        <div className="glass-navbar border-t border-border px-6 py-4 shrink-0">
+          <div className="max-w-4xl mx-auto">
+            <ChatInput
+              roomId={room.id}
+              replyTo={replyTo}
+              onClearReply={() => setReplyTo(null)}
+              onTyping={(isTyping) => {
+                console.log("User typing:", isTyping);
+              }}
+              onSend={(message) => {
+                setSentMessages((prev) => [
+                  ...prev,
+                  {
+                    id: message.id,
+                    text: message.text,
+                    created_at: new Date().toISOString(),
+                    author_id: user.id,
+                    author: {
+                      name: user.name,
+                      image_url: user.image_url,
+                    },
+                    status: "pending",
+                  },
+                ]);
+              }}
+              onSuccessfulSend={(message) => {
+                setSentMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === message.id ? { ...message, status: "success" } : m
+                  )
+                );
+              }}
+              onErrorSend={(id) => {
+                setSentMessages((prev) =>
+                  prev.map((m) => (m.id === id ? { ...m, status: "error" } : m))
+                );
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -157,6 +206,8 @@ export function useRealtimeChat({
   useEffect(() => {
     let presenceChannel: ReturnType<typeof supabase.channel> | null = null;
     let messageChannel: ReturnType<typeof supabase.channel> | null = null;
+    let profileChannel: ReturnType<typeof supabase.channel> | null = null;
+    let reactionsChannel: ReturnType<typeof supabase.channel> | null = null;
 
     async function setupRealtime() {
       const { data } = await supabase.auth.getSession();
@@ -178,7 +229,6 @@ export function useRealtimeChat({
           }
         });
 
-      // --- Messages setup ---
       messageChannel = supabase.channel(`room:${roomId}:messages`);
 
       messageChannel.on(
@@ -189,8 +239,15 @@ export function useRealtimeChat({
           table: "message",
           filter: `chat_room_id=eq.${roomId}`,
         },
-        (payload) => {
+        async (payload) => {
           const record = payload.new;
+
+          const { data: authorData } = await supabase
+            .from("user_profile")
+            .select("name, image_url")
+            .eq("id", record.author_id)
+            .single();
+
           setMessages((prev) => [
             ...prev,
             {
@@ -198,10 +255,11 @@ export function useRealtimeChat({
               text: record.text,
               created_at: record.created_at,
               author_id: record.author_id,
+              reply_to: record.reply_to,
               author: {
                 name:
-                  record.author_name ?? `user_${record.author_id.slice(0, 8)}`,
-                image_url: record.author_image_url,
+                  authorData?.name ?? `user_${record.author_id.slice(0, 8)}`,
+                image_url: authorData?.image_url ?? null,
               },
             },
           ]);
@@ -211,6 +269,51 @@ export function useRealtimeChat({
       messageChannel.subscribe((status) =>
         console.log("Message channel status:", status)
       );
+
+      profileChannel = supabase.channel(`profiles:updates`);
+
+      profileChannel.on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "user_profile",
+        },
+        (payload) => {
+          const updatedProfile = payload.new;
+
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.author_id === updatedProfile.id
+                ? {
+                    ...msg,
+                    author: {
+                      name: updatedProfile.name,
+                      image_url: updatedProfile.image_url,
+                    },
+                  }
+                : msg
+            )
+          );
+        }
+      );
+
+      profileChannel.subscribe();
+      reactionsChannel = supabase.channel(`reactions:${roomId}`);
+
+      (reactionsChannel as any).on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "message_reactions",
+        },
+        (payload: any) => {
+          console.log("Reaction change:", payload);
+        }
+      );
+
+      reactionsChannel.subscribe();
     }
 
     setupRealtime();
@@ -225,6 +328,8 @@ export function useRealtimeChat({
     return () => {
       if (presenceChannel) supabase.removeChannel(presenceChannel);
       if (messageChannel) supabase.removeChannel(messageChannel);
+      if (profileChannel) supabase.removeChannel(profileChannel);
+      if (reactionsChannel) supabase.removeChannel(reactionsChannel);
       listener.subscription.unsubscribe();
     };
   }, [roomId, userId, supabase]);
