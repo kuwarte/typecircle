@@ -36,7 +36,11 @@ export function LeaveRoomButton({
   }
 
   return (
-    <ActionButton {...props} action={leaveRoom}>
+    <ActionButton 
+      {...props} 
+      action={leaveRoom}
+      className={`hover:!bg-red-600 hover:!text-white hover:!border-red-600 transition-colors ${props.className || ''}`}
+    >
       {children}
     </ActionButton>
   );

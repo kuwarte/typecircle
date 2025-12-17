@@ -6,6 +6,7 @@ import { Ref, useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { addReaction, removeReaction } from "@/services/supabase/actions/reactions";
 import { createClient } from "@/services/supabase/client";
+import { EnneagramBadge } from "./enneagram-badge";
 
 const DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
   dateStyle: "short",
@@ -132,7 +133,7 @@ export function ChatMessage({
     <div
       ref={ref}
       className={cn(
-        "group flex gap-4 px-4 py-3 bg-gradient-to-br from-white/25 to-white/15 dark:from-black/20 dark:to-black/10 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-xl transition-all duration-200 hover:from-white/30 hover:to-white/20 dark:hover:from-black/25 dark:hover:to-black/15 relative shadow-lg",
+        "group flex gap-3 sm:gap-4 px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-br from-white/25 to-white/15 dark:from-black/20 dark:to-black/10 backdrop-blur-md border border-white/30 dark:border-white/10 rounded-lg sm:rounded-xl transition-all duration-200 hover:from-white/30 hover:to-white/20 dark:hover:from-black/25 dark:hover:to-black/15 relative shadow-lg",
         status === "pending" && "opacity-60",
         status === "error" && "bg-red-500/10 border border-red-500/20"
       )}
@@ -142,22 +143,25 @@ export function ChatMessage({
           <Image
             src={author.image_url}
             alt={author.name}
-            width={32}
-            height={32}
-            className="rounded-full"
+            width={28}
+            height={28}
+            className="rounded-full sm:w-8 sm:h-8"
           />
         ) : (
-          <div className="size-8 rounded-full flex items-center justify-center bg-gradient-to-br from-[var(--typecircle-green)]/20 to-blue-500/20 text-muted-foreground">
-            <User2Icon className="size-4" />
+          <div className="size-7 sm:size-8 rounded-full flex items-center justify-center bg-gradient-to-br from-[var(--typecircle-green)]/20 to-blue-500/20 text-muted-foreground">
+            <User2Icon className="size-3 sm:size-4" />
           </div>
         )}
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-sm font-medium text-[var(--typecircle-green)]">
+          <span className="text-xs sm:text-sm font-medium text-[var(--typecircle-green)] truncate">
             {author?.name}
           </span>
-          <span className="text-xs text-muted-foreground">
+          {author?.enneagram_type && (
+            <EnneagramBadge type={author.enneagram_type} />
+          )}
+          <span className="text-xs text-muted-foreground shrink-0">
             {DATE_FORMATTER.format(new Date(created_at))}
           </span>
         </div>

@@ -59,7 +59,7 @@ export default async function Rooms() {
   }
 
   return (
-    <div className="min-h-screen py-8">
+    <div className="min-h-screen py-8 bg-gradient-to-b from-background via-background to-muted/10">
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="glass-card rounded-3xl p-8 mb-12 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[var(--typecircle-green)]/5 via-transparent to-blue-500/5 pointer-events-none" />
@@ -147,8 +147,8 @@ function RoomCard({
   isJoined: boolean;
 }) {
   return (
-    <div className="glass-card rounded-2xl p-6 transition-all duration-200 hover:bg-white/5">
-      <div className="mb-4">
+    <div className="glass-card rounded-2xl p-6 transition-all duration-200 hover:bg-white/5 flex flex-col h-full">
+      <div className="mb-4 flex-1">
         <h3 className="text-lg font-semibold capitalize mb-2 text-[var(--typecircle-green)]">
           {name}
         </h3>
@@ -188,7 +188,7 @@ function RoomCard({
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 mt-auto">
         {isJoined ? (
           <>
             <Button asChild className="flex-1 glass-button" size="sm">

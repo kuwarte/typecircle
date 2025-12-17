@@ -25,7 +25,7 @@ export default function Navbar() {
               size={20}
               className="text-[var(--typecircle-green)]"
             />
-            <span>TypeCircle</span>
+            <span>typecircle</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -88,7 +88,9 @@ export default function Navbar() {
                     <Link href="/auth/login" onClick={() => setMobileMenuOpen(false)}>Sign In</Link>
                   </Button>
                 ) : (
-                  <UserProfileModal user={user} />
+                  <div className="w-full">
+                    <UserProfileModal user={user} />
+                  </div>
                 )}
               </div>
             </div>

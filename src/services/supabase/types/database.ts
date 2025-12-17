@@ -152,18 +152,21 @@ export type Database = {
       user_profile: {
         Row: {
           created_at: string
+          enneagram_type: number | null
           id: string
           image_url: string | null
           name: string
         }
         Insert: {
           created_at?: string
+          enneagram_type?: number | null
           id?: string
           image_url?: string | null
           name: string
         }
         Update: {
           created_at?: string
+          enneagram_type?: number | null
           id?: string
           image_url?: string | null
           name?: string

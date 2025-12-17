@@ -55,10 +55,10 @@ export function RoomClient({
 
   return (
     <div className="h-[calc(100vh-4rem)] flex flex-col">
-      <div className="glass-navbar border-b border-border px-6 py-4 shrink-0">
+      <div className="glass-navbar border-b border-border px-4 sm:px-6 py-3 sm:py-4 shrink-0">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-semibold text-foreground capitalize">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-lg sm:text-xl font-semibold text-foreground capitalize truncate">
               {room.name}
             </h1>
             <div className="flex items-center gap-1 mt-1">
@@ -68,26 +68,28 @@ export function RoomClient({
                   connectedUsers > 1 ? "text-green-500" : "text-gray-400"
                 }`}
               />
-              <span className="text-sm text-muted-foreground">
+              <span className="text-xs sm:text-sm text-muted-foreground">
                 {connectedUsers} {connectedUsers === 1 ? "user" : "users"}{" "}
                 online
               </span>
             </div>
           </div>
-          <InviteUserModal roomId={room.id} />
+          <div className="ml-2">
+            <InviteUserModal roomId={room.id} />
+          </div>
         </div>
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <div className="h-full max-w-4xl mx-auto px-6">
+        <div className="h-full max-w-4xl mx-auto px-3 sm:px-6">
           <div
-            className="h-full overflow-y-auto flex flex-col-reverse py-4"
+            className="h-full overflow-y-auto flex flex-col-reverse py-3 sm:py-4"
             style={{
               scrollbarWidth: "thin",
               scrollbarColor: "var(--border) transparent",
             }}
           >
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {status === "loading" && (
                 <div className="text-center py-4">
                   <div className="glass-subtle rounded-xl px-4 py-2 inline-block">
@@ -147,7 +149,7 @@ export function RoomClient({
       </div>
 
       {room.id !== "3fc9aa8a-81b7-4a60-92ce-066dcd9baa45" && (
-        <div className="glass-navbar border-t border-border px-6 py-4 shrink-0">
+        <div className="glass-navbar border-t border-border px-3 sm:px-6 py-3 sm:py-4 shrink-0">
           <div className="max-w-4xl mx-auto">
             <ChatInput
               roomId={room.id}
@@ -244,7 +246,7 @@ export function useRealtimeChat({
 
           const { data: authorData } = await supabase
             .from("user_profile")
-            .select("name, image_url")
+            .select("name, image_url, enneagram_type")
             .eq("id", record.author_id)
             .single();
 
@@ -260,6 +262,7 @@ export function useRealtimeChat({
                 name:
                   authorData?.name ?? `user_${record.author_id.slice(0, 8)}`,
                 image_url: authorData?.image_url ?? null,
+                enneagram_type: authorData?.enneagram_type ?? null,
               },
             },
           ]);

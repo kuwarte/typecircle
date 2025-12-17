@@ -12,6 +12,7 @@ export type Message = {
   author: {
     name: string;
     image_url: string | null;
+    enneagram_type?: number | null;
   };
 };
 

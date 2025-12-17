@@ -28,7 +28,7 @@ export default function EnneagramFAQ() {
   };
 
   return (
-    <div className="min-h-screen py-8">
+    <div className="min-h-screen py-8 bg-gradient-to-b from-background via-background to-muted/10">
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-[var(--typecircle-green)]/10 border-2 border-[var(--typecircle-green)]/20">
@@ -45,9 +45,9 @@ export default function EnneagramFAQ() {
 
         <div className="grid lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
-            <div className="glass-card rounded-2xl p-6 sticky top-8">
+            <div className="glass-card rounded-2xl p-6 sticky top-24">
               <h3 className="font-semibold text-foreground mb-4">Sections</h3>
-              <nav className="space-y-2">
+              <nav className="space-y-3">
                 <button
                   onClick={() => setActiveSection("general")}
                   className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
@@ -265,10 +265,7 @@ export default function EnneagramFAQ() {
               perspective.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                asChild
-                className="bg-[var(--typecircle-green)] text-white hover:bg-[var(--typecircle-green)]/90"
-              >
+              <Button asChild className="btn-typecircle">
                 <Link href="/enneagram/test">Take Assessment</Link>
               </Button>
               <Button asChild className="glass-button">

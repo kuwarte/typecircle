@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+import { FAQChatbot } from "@/components/faq-chatbot";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import PageProgress from "@/components/page-progress";
@@ -19,6 +21,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "typecircle",
   description: "???",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
@@ -37,9 +42,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <PageProgress />
-          <main className="pt-16 min-h-[calc(100vh-4rem)]">{children}</main>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <PageProgress />
+            <main className="pt-16 flex-1">{children}</main>
+            <Footer />
+            <FAQChatbot />
+          </div>
           <Toaster />
         </ThemeProvider>
       </body>

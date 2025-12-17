@@ -69,21 +69,21 @@ export function ChatInput({
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <div className="glass-card rounded-2xl p-4">
+      <div className="glass-card rounded-xl sm:rounded-2xl p-3 sm:p-4">
         {replyTo && (
-          <div className="mb-3 p-3 bg-muted/20 rounded-lg border-l-4 border-[var(--typecircle-green)]">
+          <div className="mb-2 sm:mb-3 p-2 sm:p-3 bg-muted/20 rounded-lg border-l-4 border-[var(--typecircle-green)]">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-medium text-[var(--typecircle-green)]">
+              <span className="text-xs font-medium text-[var(--typecircle-green)] truncate">
                 Replying to {replyTo.author}
               </span>
               <Button
                 type="button"
                 size="sm"
                 variant="ghost"
-                className="h-6 w-6 p-0"
+                className="h-5 w-5 sm:h-6 sm:w-6 p-0 shrink-0"
                 onClick={onClearReply}
               >
-                <X className="w-3 h-3" />
+                <X className="w-2 h-2 sm:w-3 sm:h-3" />
               </Button>
             </div>
             <p className="text-xs text-muted-foreground truncate">
@@ -92,13 +92,13 @@ export function ChatInput({
           </div>
         )}
         
-        <div className="flex items-end gap-3">
+        <div className="flex items-end gap-2 sm:gap-3">
           <div className="flex-1">
             <InputGroupTextarea
               placeholder={replyTo ? "Reply to message..." : "Type your message..."}
               value={message}
               onChange={handleInputChange}
-              className="w-full min-h-[44px] max-h-32 bg-transparent border-0 resize-none text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 text-sm leading-relaxed"
+              className="w-full min-h-[40px] sm:min-h-[44px] max-h-32 bg-transparent border-0 resize-none text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 text-sm leading-relaxed"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -110,10 +110,10 @@ export function ChatInput({
           <button
             type="submit"
             disabled={!message.trim()}
-            className="flex items-center justify-center w-10 h-10 bg-[var(--typecircle-green)] text-white rounded-xl transition-all duration-200 hover:bg-[var(--typecircle-green)]/90 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-typecircle flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
             aria-label="Send message"
           >
-            <SendIcon className="w-4 h-4" />
+            <SendIcon className="w-3 h-3 sm:w-4 sm:h-4" />
           </button>
         </div>
       </div>

@@ -13,14 +13,15 @@ import {
 import Image from "next/image";
 import { User2Icon } from "lucide-react";
 import { LogoutButton } from "@/services/supabase/components/logout-button";
+import { EnneagramBadge } from "./enneagram-badge";
 
-export function UserProfileModal({ user }: { user: any }) {
+export function UserProfileModal({ user }: { user: any & { enneagram_type?: number } }) {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" className="glass-button gap-2">
+        <Button size="sm" className="glass-button gap-2 w-full md:w-auto">
           {user.user_metadata?.avatar_url ? (
             <Image
               src={user.user_metadata.avatar_url}
@@ -32,7 +33,7 @@ export function UserProfileModal({ user }: { user: any }) {
           ) : (
             <User2Icon className="w-4 h-4" />
           )}
-          <span className="hidden md:inline font-medium">
+          <span className="font-medium">
             {user.user_metadata?.preferred_username?.split(' ')[0] || 'Profile'}
           </span>
         </Button>
@@ -77,9 +78,14 @@ export function UserProfileModal({ user }: { user: any }) {
               <p className="text-xs text-foreground/40 dark:text-muted-foreground/60 font-mono">
                 ID: {user.id}
               </p>
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[var(--typecircle-green)]/10 rounded-full">
-                <div className="w-2 h-2 bg-green-500 rounded-full" />
-                <span className="text-xs font-medium text-[var(--typecircle-green)]">Active</span>
+              <div className="flex items-center justify-center gap-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-[var(--typecircle-green)]/10 rounded-full">
+                  <div className="w-2 h-2 bg-green-500 rounded-full" />
+                  <span className="text-xs font-medium text-[var(--typecircle-green)]">Active</span>
+                </div>
+                {user.enneagram_type && (
+                  <EnneagramBadge type={user.enneagram_type} />
+                )}
               </div>
             </div>
 
