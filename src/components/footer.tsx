@@ -8,7 +8,8 @@ export default function Footer() {
 
   if (
     pathname.startsWith("/enneagram/test") ||
-    pathname.match(/^\/rooms\/[^/]+$/)
+    pathname.match(/^\/rooms\/[^/]+$/) ||
+    pathname.startsWith("/auth/login")
   ) {
     return null;
   }
@@ -42,10 +43,43 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-4 pt-4 border-t border-border/30 text-center">
-          <p className="text-xs text-muted-foreground">
-            © 2024 TypeCircle. All rights reserved.
-          </p>
+        <div className="mt-4 pt-4 border-t border-border/30">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4 text-xs">
+              <a
+                href="/terms"
+                className="text-muted-foreground hover:text-[var(--typecircle-green)] transition-colors"
+              >
+                Terms of Service
+              </a>
+              <a
+                href="/privacy"
+                className="text-muted-foreground hover:text-[var(--typecircle-green)] transition-colors"
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="https://github.com/kuwarte/typecircle"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-[var(--typecircle-green)] transition-colors"
+              >
+                Source Code
+              </a>
+              <a
+                href="https://logindoom.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-[var(--typecircle-green)] transition-colors"
+                title="Check out my other project."
+              >
+                loginDooM
+              </a>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              © 2024 TypeCircle. All rights reserved.
+            </p>
+          </div>
         </div>
       </div>
     </footer>

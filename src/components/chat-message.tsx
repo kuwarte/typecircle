@@ -137,6 +137,7 @@ export function ChatMessage({
         status === "pending" && "opacity-60",
         status === "error" && "bg-red-500/10 border border-red-500/20"
       )}
+      onClick={() => setShowReactions(false)}
     >
       <div className="shrink-0">
         {author?.image_url != null ? (
@@ -206,7 +207,7 @@ export function ChatMessage({
         )}
       </div>
       
-      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+      <div className="opacity-0 group-hover:opacity-100 sm:opacity-0 sm:group-hover:opacity-100 opacity-100 sm:opacity-0 transition-opacity flex gap-1">
         <Button
           size="sm"
           variant="ghost"
@@ -219,14 +220,20 @@ export function ChatMessage({
           size="sm"
           variant="ghost"
           className="h-8 w-8 p-0"
-          onClick={() => setShowReactions(!showReactions)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowReactions(!showReactions);
+          }}
         >
           <MoreHorizontal className="w-3 h-3" />
         </Button>
       </div>
       
       {showReactions && (
-        <div className="absolute right-4 top-12 bg-background border border-border rounded-lg p-2 flex gap-1 shadow-lg z-10">
+        <div 
+          className="absolute right-4 top-12 bg-background border border-border rounded-lg p-2 flex gap-1 shadow-lg z-10"
+          onClick={(e) => e.stopPropagation()}
+        >
           {REACTIONS.map(emoji => (
             <button
               key={emoji}

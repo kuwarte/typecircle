@@ -17,7 +17,11 @@ export default async function RoomPage({
 
   if (room == null || user == null) return notFound();
 
-  return <RoomClient room={room} user={user} messages={messages} />;
+  return (
+    <div className="bg-gradient-to-b from-background via-background to-muted/10">
+      <RoomClient room={room} user={user} messages={messages} />
+    </div>
+  );
 }
 
 async function getRoom(id: string) {

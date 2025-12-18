@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { MessageCircle, X, Send } from "lucide-react";
+import { FaRegCircle } from "react-icons/fa";
 import { Button } from "./ui/button";
 import { enneagramFAQ } from "@/data/enneagram-faq";
 import { enneagramTypes } from "@/data/enneagram-questions";
@@ -14,7 +16,10 @@ interface Message {
 }
 
 export function FAQChatbot() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+
+  const shouldHide = pathname.startsWith("/rooms");
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -25,121 +30,199 @@ export function FAQChatbot() {
   ]);
   const [input, setInput] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isLoading]);
 
   const suggestions = [
     "What is my Enneagram type?",
-    "Tell me about Type 1",
-    "What are wings?",
-    "How do I take the test?",
-    "What are subtypes?"
+    "Tell me about Type 4",
+    "What are wings and subtypes?",
+    "How accurate is the assessment?",
+    "What's my growth path?",
+    "How do types relate to each other?",
   ];
 
   const findAnswer = (question: string): string => {
     const q = question.toLowerCase().trim();
-    
-    // Handle vague or empty questions
-    if (q.length < 3 || ['hi', 'hello', 'hey', 'what', 'how', 'help'].includes(q)) {
-      return "I'd be happy to help! You can ask me about Enneagram types (1-9), wings, subtypes, taking the assessment, or any specific personality questions.";
+
+    if (
+      q.length < 3 ||
+      ["hi", "hello", "hey", "what", "how", "help"].includes(q)
+    ) {
+      return "🌟 Welcome to your Enneagram journey!\n\nI'm here to guide you through the fascinating world of personality types. You can ask me about:\n\n• Specific Types (1-9) - Learn about motivations, fears, and growth paths\n• Wings & Subtypes - Discover how they influence your type\n• Assessment - How to find your type\n• Growth & Development - Your path to personal transformation\n\nWhat would you like to explore first?";
     }
-    
-    // Type name mappings
+
     const typeNames: Record<string, number> = {
-      'perfectionist': 1, 'reformer': 1,
-      'helper': 2, 'giver': 2,
-      'achiever': 3, 'performer': 3,
-      'individualist': 4, 'artist': 4, 'romantic': 4,
-      'investigator': 5, 'thinker': 5, 'observer': 5,
-      'loyalist': 6, 'skeptic': 6,
-      'enthusiast': 7, 'adventurer': 7,
-      'challenger': 8, 'leader': 8, 'boss': 8,
-      'peacemaker': 9, 'mediator': 9
+      perfectionist: 1,
+      reformer: 1,
+      helper: 2,
+      giver: 2,
+      achiever: 3,
+      performer: 3,
+      individualist: 4,
+      artist: 4,
+      romantic: 4,
+      investigator: 5,
+      thinker: 5,
+      observer: 5,
+      loyalist: 6,
+      skeptic: 6,
+      enthusiast: 7,
+      adventurer: 7,
+      challenger: 8,
+      leader: 8,
+      boss: 8,
+      peacemaker: 9,
+      mediator: 9,
     };
-    
-    // Check for type-specific questions (more flexible)
+
     for (let i = 1; i <= 9; i++) {
       if (q.includes(`type ${i}`) || q.includes(`${i}`)) {
         const type = enneagramTypes[i as keyof typeof enneagramTypes];
-        return `**Type ${i} - ${type.name}**\n\n${type.description}\n\n**Core Motivation:** ${type.motivation}\n**Basic Fear:** ${type.fear}`;
+        return `🎯 Type ${i} - ${type.name}\n\n${
+          type.description
+        }\n\n🎯 Core Motivation: ${type.motivation}\n😰 Basic Fear: ${
+          type.fear
+        }\n\n💪 Key Strengths:\n${type.strengths
+          .map((s) => `• ${s}`)
+          .join("\n")}\n\n⚠️ Growth Areas:\n${type.challenges
+          .map((c) => `• ${c}`)
+          .join("\n")}\n\n🌱 Path to Growth: ${type.growth}\n😤 Under Stress: ${
+          type.stress
+        }`;
       }
     }
-    
-    // Check type names
+
     for (const [name, typeNum] of Object.entries(typeNames)) {
       if (q.includes(name)) {
         const type = enneagramTypes[typeNum as keyof typeof enneagramTypes];
-        return `**Type ${typeNum} - ${type.name}**\n\n${type.description}\n\n**Core Motivation:** ${type.motivation}\n**Basic Fear:** ${type.fear}`;
+        return `🎯 Type ${typeNum} - ${type.name}\n\n${
+          type.description
+        }\n\n🎯 Core Motivation: ${type.motivation}\n😰 Basic Fear: ${
+          type.fear
+        }\n\n💪 Key Strengths:\n${type.strengths
+          .map((s) => `• ${s}`)
+          .join("\n")}\n\n⚠️ Growth Areas:\n${type.challenges
+          .map((c) => `• ${c}`)
+          .join("\n")}\n\n🌱 Path to Growth: ${type.growth}\n😤 Under Stress: ${
+          type.stress
+        }`;
       }
     }
-    
-    // Enhanced keyword matching
-    if (q.includes('wing') || q.includes('neighbor')) {
-      return "**Wings** are the two types on either side of your main type that add flavor to your personality. For example:\n• Type 1 can have a 9 wing (1w9) or 2 wing (1w2)\n• Wings modify but don't change your core type";
+
+    if (q.includes("wing") || q.includes("neighbor")) {
+      return "🪶 Understanding Wings\n\nWings are the neighboring types that influence your core personality:\n\nHow Wings Work:\n• Everyone has access to both wings\n• One wing is usually more dominant\n• Wings add nuance and complexity\n\nExamples:\n• Type 1w9: More calm and idealistic\n• Type 1w2: More helpful and interpersonal\n• Type 4w3: More ambitious and image-conscious\n• Type 4w5: More withdrawn and intellectual\n\nWings don't change your core type - they flavor it!";
     }
-    
-    if (q.includes('test') || q.includes('assessment') || q.includes('quiz') || q.includes('find my type') || q.includes('personality')) {
-      return "You can discover your Enneagram type by taking our comprehensive assessment! It's designed by personality experts and available in the **Assessment** section. The test analyzes your motivations and fears to identify your core type.";
+
+    if (
+      q.includes("test") ||
+      q.includes("assessment") ||
+      q.includes("quiz") ||
+      q.includes("find my type") ||
+      q.includes("personality")
+    ) {
+      return "📝 Discover Your Enneagram Type\n\nOur comprehensive assessment helps you identify your core personality type through:\n\n✨ What Makes It Accurate:\n• 45 carefully crafted questions\n• Focus on core motivations & fears\n• Based on Enneagram Institute research\n• Considers behavioral patterns\n\n🎯 What You'll Learn:\n• Your primary type (1-9)\n• Core motivations and fears\n• Growth and stress patterns\n• Personalized insights\n\n📍 Ready to start? Head to the Assessment section in the navigation to begin your journey of self-discovery!";
     }
-    
-    if (q.includes('community') || q.includes('join') || q.includes('chat') || q.includes('socialize') || q.includes('connect') || q.includes('rooms')) {
-      return "You can join our **Community** section to chat with others who share your Enneagram journey! Connect with people of your type or explore different perspectives. Look for the Community/Rooms section in the navigation to start chatting and socializing with fellow Enneagram enthusiasts.";
+
+    if (
+      q.includes("community") ||
+      q.includes("join") ||
+      q.includes("chat") ||
+      q.includes("socialize") ||
+      q.includes("connect") ||
+      q.includes("rooms")
+    ) {
+      return "You can join our Community section to chat with others who share your Enneagram journey! Connect with people of your type or explore different perspectives. Look for the Community/Rooms section in the navigation to start chatting and socializing with fellow Enneagram enthusiasts.";
     }
-    
-    if ((q.includes('subtype') || q.includes('instinct') || q.includes('sp') || q.includes('so') || q.includes('sx')) && !q.includes('chat') && !q.includes('socialize')) {
-      return "**Instinctual Subtypes** add another layer to your type:\n\n• **Self-Preservation (SP):** Focus on safety, comfort, and resources\n• **Social (SO):** Focus on group dynamics and belonging\n• **Sexual/One-to-One (SX):** Focus on intensity and connection\n\nEach type expresses differently based on their dominant subtype.";
+
+    if (
+      (q.includes("subtype") ||
+        q.includes("instinct") ||
+        q.includes("sp") ||
+        q.includes("so") ||
+        q.includes("sx")) &&
+      !q.includes("chat") &&
+      !q.includes("socialize")
+    ) {
+      return "🧠 Instinctual Subtypes: The Third Dimension\n\nSubtypes add crucial depth to your Enneagram type:\n\n🏠 Self-Preservation (SP)\n• Focus: Safety, comfort, resources\n• Concerns: Health, security, material needs\n• Energy: Inward, conservative\n\n👥 Social (SO)\n• Focus: Group dynamics, belonging\n• Concerns: Status, relationships, community\n• Energy: Outward, aware of social hierarchies\n\n⚡ Sexual/One-to-One (SX)\n• Focus: Intensity, chemistry, connection\n• Concerns: Attraction, energy, impact\n• Energy: Magnetic, seeking intensity\n\nYour dominant subtype significantly influences how your type manifests!";
     }
-    
-    if (q.includes('growth') || q.includes('integration') || q.includes('healthy')) {
-      return "**Growth (Integration)** happens when you move toward your integration point - the healthy aspects of another type. This represents your path to psychological health and personal development.";
+
+    if (
+      q.includes("growth") ||
+      q.includes("integration") ||
+      q.includes("healthy")
+    ) {
+      return "Growth (Integration) happens when you move toward your integration point - the healthy aspects of another type. This represents your path to psychological health and personal development.";
     }
-    
-    if (q.includes('stress') || q.includes('disintegration') || q.includes('unhealthy')) {
-      return "**Stress (Disintegration)** occurs when you move toward your disintegration point - taking on the unhealthy aspects of another type. Recognizing this helps you manage stress better.";
+
+    if (
+      q.includes("stress") ||
+      q.includes("disintegration") ||
+      q.includes("unhealthy")
+    ) {
+      return "Stress (Disintegration) occurs when you move toward your disintegration point - taking on the unhealthy aspects of another type. Recognizing this helps you manage stress better.";
     }
-    
-    if (q.includes('center') || q.includes('triad')) {
-      return "The Enneagram has **three centers:**\n\n• **Body/Gut (8,9,1):** Focus on control and autonomy\n• **Heart/Feeling (2,3,4):** Focus on identity and image\n• **Head/Thinking (5,6,7):** Focus on security and certainty\n\nEach center has a different way of processing the world.";
+
+    if (q.includes("center") || q.includes("triad")) {
+      return "The Enneagram has three centers:\n\n• Body/Gut (8,9,1): Focus on control and autonomy\n• Heart/Feeling (2,3,4): Focus on identity and image\n• Head/Thinking (5,6,7): Focus on security and certainty\n\nEach center has a different way of processing the world.";
     }
-    
-    // Search FAQ more flexibly
+
     for (const faq of enneagramFAQ.general) {
-      const faqWords = faq.question.toLowerCase().split(' ');
-      const questionWords = q.split(' ');
-      if (questionWords.some(word => faqWords.some(faqWord => faqWord.includes(word) && word.length > 2))) {
+      const faqWords = faq.question.toLowerCase().split(" ");
+      const questionWords = q.split(" ");
+      if (
+        questionWords.some((word) =>
+          faqWords.some((faqWord) => faqWord.includes(word) && word.length > 2)
+        )
+      ) {
         return faq.answer;
       }
     }
-    
-    // Enhanced fallback responses
+
     const fallbacks = [
-      "I'm not quite sure about that. Could you be more specific? You can ask about:\n• Specific types (1-9)\n• Wings and subtypes\n• Taking the assessment\n• Growth and stress patterns",
-      "That's an interesting question! I specialize in Enneagram topics. Try asking about personality types, wings, or how to discover your type through our assessment.",
-      "I'd love to help, but I need a bit more context. Feel free to ask about any of the 9 Enneagram types, personality development, or how the system works!"
+      "🤔 I'd love to help you explore that further!\n\nI specialize in Enneagram wisdom. Here's what I can guide you through:\n\n🎯 Core Topics:\n• All 9 personality types\n• Wings & subtypes\n• Growth & stress patterns\n• Assessment guidance\n\n💡 Try asking:\n• Tell me about Type [1-9]\n• What are wings?\n• How do I find my type?\n• What's my growth path?",
+      "✨ Great question! I'm your dedicated Enneagram guide.\n\nI can help you understand:\n• Personality type descriptions\n• Motivations and fears\n• Personal growth paths\n• How to take the assessment\n\nWhat aspect of the Enneagram interests you most?",
+      "🌟 I'm here to illuminate your Enneagram journey!\n\nWhether you're curious about:\n• Finding your type\n• Understanding relationships\n• Personal development\n• Type dynamics\n\nJust ask! I'm designed to make the Enneagram accessible and meaningful for you.",
     ];
-    
+
     return fallbacks[Math.floor(Math.random() * fallbacks.length)];
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
-    
+
     const userMessage: Message = {
       id: Date.now().toString(),
       text: input,
       isBot: false,
       timestamp: new Date(),
     };
-    
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setShowSuggestions(false);
+    setIsLoading(true);
+
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
     const botResponse: Message = {
       id: (Date.now() + 1).toString(),
-      text: findAnswer(input),
+      text: findAnswer(userMessage.text),
       isBot: true,
       timestamp: new Date(),
     };
-    
-    setMessages(prev => [...prev, userMessage, botResponse]);
-    setInput("");
-    setShowSuggestions(false);
+
+    setMessages((prev) => [...prev, botResponse]);
+    setIsLoading(false);
   };
+
+  if (shouldHide) {
+    return null;
+  }
 
   return (
     <>
@@ -151,42 +234,85 @@ export function FAQChatbot() {
           <MessageCircle className="w-6 h-6" />
         </Button>
       )}
-      
+
       {isOpen && (
         <div className="fixed bottom-6 right-6 w-80 h-96 bg-background/95 backdrop-blur-xl border border-border rounded-2xl shadow-2xl z-50 flex flex-col">
           <div className="flex items-center justify-between p-4 border-b border-border/30">
-            <h3 className="font-semibold text-foreground">FAQ Assistant</h3>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsOpen(false)}
-              className="h-8 w-8 p-0"
-            >
-              <X className="w-4 h-4" />
-            </Button>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--typecircle-green)]/10 border-2 border-[var(--typecircle-green)]/20 flex items-center justify-center">
+                <FaRegCircle className="text-sm text-[var(--typecircle-green)]" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground">Jasper</h3>
+                <p className="text-xs text-muted-foreground italic">
+                  Enneagram Assistant
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowSuggestions(!showSuggestions)}
+                className="h-8 w-8 p-0"
+                title="Toggle suggestions"
+              >
+                <MessageCircle className="w-3 h-3" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsOpen(false)}
+                className="h-8 w-8 p-0"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
-          
+
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}
+                className={`flex ${
+                  message.isBot ? "justify-start" : "justify-end"
+                }`}
               >
                 <div
-                  className={`max-w-[80%] p-3 rounded-lg text-sm ${
+                  className={`max-w-[80%] p-3 rounded-lg text-sm whitespace-pre-line ${
                     message.isBot
-                      ? 'bg-muted/50 text-foreground'
-                      : 'bg-[var(--typecircle-green)] text-white'
+                      ? "bg-muted/50 text-foreground"
+                      : "bg-[var(--typecircle-green)] text-white"
                   }`}
                 >
                   {message.text}
                 </div>
               </div>
             ))}
-            
+
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-muted/50 text-foreground max-w-[80%] p-3 rounded-lg text-sm">
+                  <div className="flex gap-1">
+                    <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce"></div>
+                    <div
+                      className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce"
+                      style={{ animationDelay: "0.1s" }}
+                    ></div>
+                    <div
+                      className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce"
+                      style={{ animationDelay: "0.2s" }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {showSuggestions && (
               <div className="space-y-2">
-                <p className="text-xs text-muted-foreground text-center">Try asking:</p>
+                <p className="text-xs text-muted-foreground text-center">
+                  Try asking:
+                </p>
                 {suggestions.map((suggestion, index) => (
                   <button
                     key={index}
@@ -201,15 +327,16 @@ export function FAQChatbot() {
                 ))}
               </div>
             )}
+            <div ref={messagesEndRef} />
           </div>
-          
+
           <div className="p-4 border-t border-border/30">
             <div className="flex gap-2">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                onKeyDown={(e) => e.key === "Enter" && handleSend()}
                 placeholder="Ask about Enneagram..."
                 className="flex-1 px-3 py-2 bg-muted/30 border border-border/30 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--typecircle-green)]/50"
               />

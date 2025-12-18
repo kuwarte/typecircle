@@ -1,149 +1,140 @@
 export const enneagramQuestions = [
-  {
-    id: 1,
-    question: "I tend to be perfectionistic and critical of myself and others.",
-    type: 1
-  },
-  {
-    id: 2,
-    question: "I focus on helping others and meeting their needs before my own.",
-    type: 2
-  },
-  {
-    id: 3,
-    question: "I am driven to succeed and achieve my goals, often at a fast pace.",
-    type: 3
-  },
-  {
-    id: 4,
-    question: "I often feel different from others and long for what's missing in my life.",
-    type: 4
-  },
-  {
-    id: 5,
-    question: "I prefer to observe and understand before taking action.",
-    type: 5
-  },
-  {
-    id: 6,
-    question: "I tend to be anxious and seek security and support from others.",
-    type: 6
-  },
-  {
-    id: 7,
-    question: "I love new experiences and tend to avoid negative emotions.",
-    type: 7
-  },
-  {
-    id: 8,
-    question: "I am assertive and like to be in control of situations.",
-    type: 8
-  },
-  {
-    id: 9,
-    question: "I prefer harmony and tend to avoid conflict whenever possible.",
-    type: 9
-  },
-  {
-    id: 10,
-    question: "I have high standards and get frustrated when things aren't done correctly.",
-    type: 1
-  },
-  {
-    id: 11,
-    question: "I often put others' needs before my own, sometimes to my detriment.",
-    type: 2
-  },
-  {
-    id: 12,
-    question: "I am competitive and image-conscious about how others perceive me.",
-    type: 3
-  },
-  {
-    id: 13,
-    question: "I experience intense emotions and feel misunderstood by others.",
-    type: 4
-  },
-  {
-    id: 14,
-    question: "I need time alone to recharge and process my thoughts.",
-    type: 5
-  },
-  {
-    id: 15,
-    question: "I often doubt myself and seek reassurance from trusted people.",
-    type: 6
-  },
-  {
-    id: 16,
-    question: "I get bored easily and always look for the next exciting thing.",
-    type: 7
-  },
-  {
-    id: 17,
-    question: "I speak directly and don't like when people beat around the bush.",
-    type: 8
-  },
-  {
-    id: 18,
-    question: "I tend to procrastinate and have difficulty making decisions.",
-    type: 9
-  }
+  { id: 1, question: "I tend to be perfectionistic and critical of myself and others.", type: 1 },
+  { id: 2, question: "I focus on helping others and meeting their needs before my own.", type: 2 },
+  { id: 3, question: "I am driven to succeed and achieve my goals, often at a fast pace.", type: 3 },
+  { id: 4, question: "I often feel different from others and long for what's missing in my life.", type: 4 },
+  { id: 5, question: "I prefer to observe and understand before taking action.", type: 5 },
+  { id: 6, question: "I tend to be anxious and seek security and support from others.", type: 6 },
+  { id: 7, question: "I love new experiences and tend to avoid negative emotions.", type: 7 },
+  { id: 8, question: "I am assertive and like to be in control of situations.", type: 8 },
+  { id: 9, question: "I prefer harmony and tend to avoid conflict whenever possible.", type: 9 },
+  { id: 10, question: "I have high standards and get frustrated when things aren't done correctly.", type: 1 },
+  { id: 11, question: "I often put others' needs before my own, sometimes to my detriment.", type: 2 },
+  { id: 12, question: "I am competitive and image-conscious about how others perceive me.", type: 3 },
+  { id: 13, question: "I experience intense emotions and feel misunderstood by others.", type: 4 },
+  { id: 14, question: "I need time alone to recharge and process my thoughts.", type: 5 },
+  { id: 15, question: "I often doubt myself and seek reassurance from trusted people.", type: 6 },
+  { id: 16, question: "I get bored easily and always look for the next exciting thing.", type: 7 },
+  { id: 17, question: "I speak directly and don't like when people beat around the bush.", type: 8 },
+  { id: 18, question: "I tend to procrastinate and have difficulty making decisions.", type: 9 },
+  { id: 19, question: "I believe there's a right way to do things and feel compelled to correct errors.", type: 1 },
+  { id: 20, question: "I pride myself on being indispensable to the people I care about.", type: 2 },
+  { id: 21, question: "I adapt my personality to fit what I think others want to see.", type: 3 },
+  { id: 22, question: "I'm drawn to beauty, authenticity, and what others might find melancholic.", type: 4 },
+  { id: 23, question: "I prefer to think things through thoroughly before sharing my thoughts.", type: 5 },
+  { id: 24, question: "I'm loyal to people and causes, but I question authority and motives.", type: 6 },
+  { id: 25, question: "I keep my options open and resist being tied down to one thing.", type: 7 },
+  { id: 26, question: "I protect myself and others from being taken advantage of.", type: 8 },
+  { id: 27, question: "I go along with others' plans to maintain peace and avoid confrontation.", type: 9 },
+  { id: 28, question: "I feel responsible for making things better and fixing what's wrong.", type: 1 },
+  { id: 29, question: "I can sense what others need emotionally and try to provide it.", type: 2 },
+  { id: 30, question: "I measure my worth by my accomplishments and others' recognition.", type: 3 },
+  { id: 31, question: "I feel like something important is missing from my life or relationships.", type: 4 },
+  { id: 32, question: "I conserve my energy and resources for things that truly matter to me.", type: 5 },
+  { id: 33, question: "I prepare for worst-case scenarios and potential problems.", type: 6 },
+  { id: 34, question: "I reframe negative situations to focus on the positive possibilities.", type: 7 },
+  { id: 35, question: "I take charge when I see injustice or when others won't act.", type: 8 },
+  { id: 36, question: "I merge with others' agendas and lose track of my own priorities.", type: 9 },
+  { id: 37, question: "I have a strong inner critic that points out flaws and mistakes.", type: 1 },
+  { id: 38, question: "I become resentful when my efforts to help others go unappreciated.", type: 2 },
+  { id: 39, question: "I can become impatient with inefficiency and focus on results over process.", type: 3 },
+  { id: 40, question: "I compare myself to others and often feel like I come up short.", type: 4 },
+  { id: 41, question: "I withdraw when I feel overwhelmed or when others demand too much.", type: 5 },
+  { id: 42, question: "I test people's loyalty and commitment to see if I can trust them.", type: 6 },
+  { id: 43, question: "I have difficulty sitting with painful emotions and prefer to stay busy.", type: 7 },
+  { id: 44, question: "I can be confrontational when I feel someone is being dishonest or weak.", type: 8 },
+  { id: 45, question: "I struggle to prioritize my own needs and often forget what I want.", type: 9 }
 ];
 
 export const enneagramTypes = {
   1: {
     name: "The Perfectionist",
-    description: "Principled, purposeful, self-controlled, and perfectionistic.",
+    description: "Principled, purposeful, self-controlled, and perfectionistic. You have a strong sense of right and wrong and strive to improve everything around you.",
     motivation: "To be good, right, and perfect",
-    fear: "Being corrupt, evil, or defective"
+    fear: "Being corrupt, evil, or defective",
+    strengths: ["High standards", "Ethical", "Organized", "Responsible"],
+    challenges: ["Self-criticism", "Rigidity", "Impatience", "Resentment"],
+    growth: "Learn to accept imperfection and practice self-compassion",
+    stress: "Become more critical and controlling"
   },
   2: {
     name: "The Helper", 
-    description: "Generous, demonstrative, people-pleasing, and possessive.",
+    description: "Generous, demonstrative, people-pleasing, and possessive. You are empathetic and sincere, with a genuine desire to help others.",
     motivation: "To feel loved and needed",
-    fear: "Being unloved or unwanted"
+    fear: "Being unloved or unwanted",
+    strengths: ["Caring", "Generous", "Empathetic", "Supportive"],
+    challenges: ["People-pleasing", "Neglecting own needs", "Manipulation", "Possessiveness"],
+    growth: "Focus on self-care and recognize your own needs",
+    stress: "Become demanding and feel unappreciated"
   },
   3: {
     name: "The Achiever",
-    description: "Adaptive, excelling, driven, and image-conscious.",
+    description: "Adaptive, excelling, driven, and image-conscious. You are success-oriented, pragmatic, and highly motivated to achieve your goals.",
     motivation: "To feel valuable and worthwhile",
-    fear: "Being worthless or without value"
+    fear: "Being worthless or without value",
+    strengths: ["Goal-oriented", "Efficient", "Adaptable", "Confident"],
+    challenges: ["Image-focused", "Workaholic", "Competitive", "Avoiding failure"],
+    growth: "Connect with authentic feelings and values beyond achievement",
+    stress: "Become more competitive and deceptive"
   },
   4: {
     name: "The Individualist",
-    description: "Expressive, dramatic, self-absorbed, and temperamental.",
+    description: "Expressive, dramatic, self-absorbed, and temperamental. You are sensitive, introspective, and seek to understand your identity and place in the world.",
     motivation: "To find themselves and their significance",
-    fear: "Having no identity or personal significance"
+    fear: "Having no identity or personal significance",
+    strengths: ["Creative", "Authentic", "Emotionally deep", "Intuitive"],
+    challenges: ["Moodiness", "Self-absorption", "Envy", "Melancholy"],
+    growth: "Focus on the present and appreciate what you have",
+    stress: "Become more withdrawn and depressed"
   },
   5: {
     name: "The Investigator",
-    description: "Intense, cerebral, perceptive, and isolated.",
+    description: "Intense, cerebral, perceptive, and isolated. You are innovative, independent, and have a deep need to understand the world around you.",
     motivation: "To be capable and competent",
-    fear: "Being useless, helpless, or incapable"
+    fear: "Being useless, helpless, or incapable",
+    strengths: ["Analytical", "Independent", "Innovative", "Objective"],
+    challenges: ["Isolation", "Detachment", "Minimalism", "Secretiveness"],
+    growth: "Engage more with others and share your knowledge",
+    stress: "Become more scattered and hyperactive"
   },
   6: {
     name: "The Loyalist",
-    description: "Engaging, responsible, anxious, and suspicious.",
+    description: "Engaging, responsible, anxious, and suspicious. You are committed, security-oriented, and seek guidance and support from others.",
     motivation: "To have security and support",
-    fear: "Being without support or guidance"
+    fear: "Being without support or guidance",
+    strengths: ["Loyal", "Responsible", "Committed", "Troubleshooting"],
+    challenges: ["Anxiety", "Doubt", "Suspicion", "Indecision"],
+    growth: "Trust yourself and develop inner confidence",
+    stress: "Become more reactive and aggressive"
   },
   7: {
     name: "The Enthusiast",
-    description: "Spontaneous, versatile, acquisitive, and scattered.",
+    description: "Spontaneous, versatile, acquisitive, and scattered. You are optimistic, future-focused, and seek to maintain happiness and avoid pain.",
     motivation: "To maintain happiness and fulfillment",
-    fear: "Being trapped in pain or deprivation"
+    fear: "Being trapped in pain or deprivation",
+    strengths: ["Optimistic", "Versatile", "Spontaneous", "Enthusiastic"],
+    challenges: ["Impulsiveness", "Superficiality", "FOMO", "Avoiding pain"],
+    growth: "Learn to stay present and work through difficult emotions",
+    stress: "Become more scattered and self-centered"
   },
   8: {
     name: "The Challenger",
-    description: "Self-confident, decisive, willful, and confrontational.",
+    description: "Self-confident, decisive, willful, and confrontational. You are powerful, dominating, and seek to control your environment and destiny.",
     motivation: "To be self-reliant and in control",
-    fear: "Being controlled or vulnerable"
+    fear: "Being controlled or vulnerable",
+    strengths: ["Leadership", "Decisive", "Protective", "Direct"],
+    challenges: ["Dominating", "Impatience", "Confrontational", "Excess"],
+    growth: "Show vulnerability and consider others' perspectives",
+    stress: "Become more secretive and withdrawn"
   },
   9: {
     name: "The Peacemaker",
-    description: "Receptive, reassuring, complacent, and resigned.",
+    description: "Receptive, reassuring, complacent, and resigned. You are accepting, trusting, and seek to maintain harmony and avoid conflict.",
     motivation: "To maintain inner and outer peace",
-    fear: "Loss of connection and fragmentation"
+    fear: "Loss of connection and fragmentation",
+    strengths: ["Peaceful", "Accepting", "Supportive", "Stable"],
+    challenges: ["Procrastination", "Stubbornness", "Avoidance", "Inertia"],
+    growth: "Take action on your priorities and assert your needs",
+    stress: "Become more anxious and worried"
   }
 };

@@ -6,7 +6,7 @@ import { InviteUserModal } from "@/components/invite-user-modal";
 import { Button } from "@/components/ui/button";
 import { Message } from "@/services/supabase/actions/messages";
 import { createClient } from "@/services/supabase/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FaCircle } from "react-icons/fa";
 
 export function RoomClient({
@@ -47,11 +47,20 @@ export function RoomClient({
     text: string;
   } | null>(null);
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const visibleMessages = oldMessages.concat(
     realtimeMessages,
     sentMessages.filter((m) => !realtimeMessages.find((rm) => rm.id === m.id))
   );
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [visibleMessages]);
 
   return (
     <div className="h-[calc(100vh-4rem)] flex flex-col">
@@ -143,6 +152,7 @@ export function RoomClient({
                   </div>
                 </div>
               )}
+              <div ref={messagesEndRef} />
             </div>
           </div>
         </div>
