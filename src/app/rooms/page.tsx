@@ -25,6 +25,24 @@ import { JoinRoomButton } from "@/components/join-room-btn";
 import { FaPlus } from "react-icons/fa";
 import { Badge } from "@/components/ui/badge";
 import RoomsLoading from "@/components/rooms-loading";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Community Rooms | TypeCircle",
+  description:
+    "Join discussion rooms with people of similar Enneagram types. Share experiences, get support, and grow together in a supportive community environment.",
+  keywords: [
+    "enneagram community",
+    "personality type discussions",
+    "support groups",
+    "personal growth community",
+  ],
+  openGraph: {
+    title: "Join Enneagram Community Rooms | TypeCircle",
+    description:
+      "Connect with others who share your Enneagram type. Engage in meaningful discussions and support each other's personal growth journey.",
+  },
+};
 
 export default function Rooms() {
   return (

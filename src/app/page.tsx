@@ -1,6 +1,35 @@
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { FaComments, FaRegCircle, FaUser, FaUsers } from "react-icons/fa";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Home | TypeCircle - Discover Your Enneagram Personality Type",
+  description:
+    "Start your journey of self-discovery with our comprehensive Enneagram personality assessment. Understand your core motivations, fears, and growth opportunities. Join thousands in personal development.",
+  keywords: [
+    "enneagram test",
+    "personality assessment",
+    "self discovery",
+    "enneagram types",
+    "personal growth",
+    "personality quiz",
+  ],
+  openGraph: {
+    title: "Discover Your True Self Through the Enneagram | TypeCircle",
+    description:
+      "Take our scientific Enneagram assessment to unlock deeper understanding of yourself and connect with others on similar journeys.",
+    url: "https://typecircle.vercel.app",
+    images: [
+      {
+        url: "/og-home.png",
+        width: 1200,
+        height: 630,
+        alt: "TypeCircle Home - Enneagram Personality Assessment",
+      },
+    ],
+  },
+};
 
 function FeatureCard({
   icon,
@@ -21,7 +50,9 @@ function FeatureCard({
           <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-foreground">
             {title}
           </h3>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{description}</p>
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+            {description}
+          </p>
         </div>
       </div>
     </Link>

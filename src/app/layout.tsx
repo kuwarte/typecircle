@@ -20,10 +20,80 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "typecircle",
-  description: "???",
+  metadataBase: new URL("https://typecircle.vercel.app"),
+  title: "TypeCircle - Discover Your Enneagram Personality Type",
+  description:
+    "Take our comprehensive Enneagram personality assessment to discover your true self. Join a supportive community for personal growth and meaningful connections through the Enneagram system.",
+  keywords: [
+    "enneagram",
+    "personality test",
+    "self-discovery",
+    "personality types",
+    "enneagram assessment",
+    "personal growth",
+  ],
+  authors: [{ name: "TypeCircle" }],
+  creator: "TypeCircle",
+  publisher: "TypeCircle",
+  openGraph: {
+    title: "TypeCircle - Discover Your Enneagram Personality Type",
+    description:
+      "Take our comprehensive Enneagram personality assessment to discover your true self. Join a supportive community for personal growth and meaningful connections.",
+    url: "https://typecircle.vercel.app",
+    siteName: "TypeCircle",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "TypeCircle - Enneagram Personality Assessment",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TypeCircle - Discover Your Enneagram Personality Type",
+    description:
+      "Take our comprehensive Enneagram personality assessment to discover your true self.",
+    images: ["/og-image.png"],
+    creator: "@typecircle",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
-    icon: '/favicon.svg',
+    icon: "/favicon.svg",
+  },
+  other: {
+    "application/ld+json": JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      name: "TypeCircle",
+      description:
+        "Discover your Enneagram personality type with our comprehensive assessment and join a supportive community for personal growth.",
+      url: "https://typecircle.vercel.app",
+      applicationCategory: "LifestyleApplication",
+      operatingSystem: "Web Browser",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+      creator: {
+        "@type": "Organization",
+        name: "TypeCircle",
+      },
+    }),
   },
 };
 
