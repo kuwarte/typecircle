@@ -20,7 +20,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://typecircle.vercel.app"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://typecircle.vercel.app"
+  ),
   title: "TypeCircle - Discover Your Enneagram Personality Type",
   description:
     "Take our comprehensive Enneagram personality assessment to discover your true self. Join a supportive community for personal growth and meaningful connections through the Enneagram system.",
@@ -42,7 +44,7 @@ export const metadata: Metadata = {
     title: "TypeCircle - Discover Your Enneagram Personality Type",
     description:
       "Take our comprehensive Enneagram personality assessment to discover your true self. Join a supportive community for personal growth and meaningful connections.",
-    url: "https://typecircle.vercel.app",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://typecircle.vercel.app",
     siteName: "TypeCircle",
     images: [
       {
@@ -84,7 +86,7 @@ export const metadata: Metadata = {
       name: "TypeCircle",
       description:
         "Discover your Enneagram personality type with our comprehensive assessment and join a supportive community for personal growth.",
-      url: "https://typecircle.vercel.app",
+      url: process.env.NEXT_PUBLIC_SITE_URL || "https://typecircle.vercel.app",
       applicationCategory: "LifestyleApplication",
       operatingSystem: "Web Browser",
       offers: {

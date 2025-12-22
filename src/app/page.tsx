@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     title: "Discover Your True Self Through the Enneagram | TypeCircle",
     description:
       "Take our scientific Enneagram assessment to unlock deeper understanding of yourself and connect with others on similar journeys.",
-    url: "https://typecircle.vercel.app",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://typecircle.vercel.app",
     images: [
       {
         url: "/og-home.png",
