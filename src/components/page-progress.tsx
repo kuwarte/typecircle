@@ -37,8 +37,8 @@ export default function PageProgress() {
       setTimeout(() => {
         setLoading(false);
         setProgress(0);
-      }, 300);
-    }, 500);
+      }, 200);
+    }, 200);
 
     return () => clearTimeout(timeout);
   }, [loading]);

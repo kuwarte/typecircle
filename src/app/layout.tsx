@@ -7,6 +7,7 @@ import { FAQChatbot } from "@/components/faq-chatbot";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import PageProgress from "@/components/page-progress";
+import PageAnimation from "@/components/page-animation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,7 +46,9 @@ export default function RootLayout({
           <div className="flex flex-col min-h-screen">
             <Navbar />
             <PageProgress />
-            <main className="pt-16 flex-1">{children}</main>
+            <main className="pt-16 flex-1">
+              <PageAnimation>{children}</PageAnimation>
+            </main>
             <Footer />
             <FAQChatbot />
           </div>

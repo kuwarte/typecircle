@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -23,8 +24,17 @@ import { LeaveRoomButton } from "@/components/leave-room-btn";
 import { JoinRoomButton } from "@/components/join-room-btn";
 import { FaPlus } from "react-icons/fa";
 import { Badge } from "@/components/ui/badge";
+import RoomsLoading from "@/components/rooms-loading";
 
-export default async function Rooms() {
+export default function Rooms() {
+  return (
+    <Suspense fallback={<RoomsLoading />}>
+      <RoomsContent />
+    </Suspense>
+  );
+}
+
+async function RoomsContent() {
   const user = await getCurrentUser();
   if (user == null) {
     redirect("/auth/login");

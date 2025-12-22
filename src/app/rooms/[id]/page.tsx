@@ -1,9 +1,23 @@
+import { Suspense } from "react";
 import { getCurrentUser } from "@/services/supabase/lib/getCurrentUser";
 import { createAdminClient } from "@/services/supabase/server";
 import { notFound } from "next/navigation";
 import { RoomClient } from "./_client";
+import MessageLoading from "@/components/message-loading";
 
-export default async function RoomPage({
+export default function RoomPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  return (
+    <Suspense fallback={<MessageLoading />}>
+      <RoomContent params={params} />
+    </Suspense>
+  );
+}
+
+async function RoomContent({
   params,
 }: {
   params: Promise<{ id: string }>;

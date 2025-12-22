@@ -2,9 +2,12 @@ import { cn } from "@/lib/utils";
 import { Message } from "@/services/supabase/actions/messages";
 import { User2Icon, Reply, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
-import { Ref, useState, useEffect } from "react";
+import { Ref, useState, useEffect, useRef } from "react";
 import { Button } from "./ui/button";
-import { addReaction, removeReaction } from "@/services/supabase/actions/reactions";
+import {
+  addReaction,
+  removeReaction,
+} from "@/services/supabase/actions/reactions";
 import { createClient } from "@/services/supabase/client";
 import { EnneagramBadge } from "./enneagram-badge";
 
@@ -13,7 +16,7 @@ const DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
   timeStyle: "short",
 });
 
-const REACTIONS = ['👍', '❤️', '😂', '😮', '😢', '😡'];
+const REACTIONS = ["👍", "❤️", "😂", "😮", "😢", "😡"];
 
 export function ChatMessage({
   id,
@@ -32,46 +35,67 @@ export function ChatMessage({
   reply_to?: string | null;
 }) {
   const [showReactions, setShowReactions] = useState(false);
-  const [reactions, setReactions] = useState<Record<string, { count: number; users: string[] }>>({});
+  const [reactions, setReactions] = useState<
+    Record<string, { count: number; users: string[] }>
+  >({});
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-  const [replyToMessage, setReplyToMessage] = useState<{ author: string; text: string } | null>(null);
+  const [replyToMessage, setReplyToMessage] = useState<{
+    author: string;
+    text: string;
+  } | null>(null);
   const supabase = createClient();
+  const emojiPopupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Get current user
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        emojiPopupRef.current &&
+        !emojiPopupRef.current.contains(event.target as Node)
+      ) {
+        setShowReactions(false);
+      }
+    };
+
+    if (showReactions) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showReactions]);
+
+  useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setCurrentUserId(user?.id || null);
     });
-    
-    // Load reply message if exists
+
     if (reply_to) {
       supabase
-        .from('message')
-        .select('text, author:user_profile(name)')
-        .eq('id', reply_to)
+        .from("message")
+        .select("text, author:user_profile(name)")
+        .eq("id", reply_to)
         .single()
         .then(({ data }) => {
           if (data) {
             setReplyToMessage({
-              author: data.author?.name || 'User',
-              text: data.text
+              author: data.author?.name || "User",
+              text: data.text,
             });
           }
         });
     }
-    
-    // Load existing reactions
+
     loadReactions();
-    
-    // Subscribe to reaction changes
+
     const channel = supabase
       .channel(`reactions:${id}`)
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'message_reactions',
+          event: "*",
+          schema: "public",
+          table: "message_reactions",
           filter: `message_id=eq.${id}`,
         },
         () => {
@@ -87,12 +111,13 @@ export function ChatMessage({
 
   const loadReactions = async () => {
     const { data } = await (supabase as any)
-      .from('message_reactions')
-      .select('emoji, user_id')
-      .eq('message_id', id);
+      .from("message_reactions")
+      .select("emoji, user_id")
+      .eq("message_id", id);
 
     if (data) {
-      const reactionMap: Record<string, { count: number; users: string[] }> = {};
+      const reactionMap: Record<string, { count: number; users: string[] }> =
+        {};
       data.forEach(({ emoji, user_id }: any) => {
         if (!reactionMap[emoji]) {
           reactionMap[emoji] = { count: 0, users: [] };
@@ -108,24 +133,22 @@ export function ChatMessage({
     if (!currentUserId) return;
 
     const hasReacted = reactions[emoji]?.users.includes(currentUserId);
-    
+
     if (hasReacted) {
       await (supabase as any)
-        .from('message_reactions')
+        .from("message_reactions")
         .delete()
-        .eq('message_id', id)
-        .eq('user_id', currentUserId)
-        .eq('emoji', emoji);
+        .eq("message_id", id)
+        .eq("user_id", currentUserId)
+        .eq("emoji", emoji);
     } else {
-      await (supabase as any)
-        .from('message_reactions')
-        .upsert({
-          message_id: id,
-          user_id: currentUserId,
-          emoji
-        });
+      await (supabase as any).from("message_reactions").upsert({
+        message_id: id,
+        user_id: currentUserId,
+        emoji,
+      });
     }
-    
+
     setShowReactions(false);
   };
 
@@ -166,7 +189,7 @@ export function ChatMessage({
             {DATE_FORMATTER.format(new Date(created_at))}
           </span>
         </div>
-        
+
         {replyToMessage && (
           <div className="mb-2 pl-3 border-l-2 border-[var(--typecircle-green)]/30 bg-muted/20 rounded-r-lg p-2">
             <div className="text-xs text-[var(--typecircle-green)] font-medium mb-1">
@@ -177,26 +200,32 @@ export function ChatMessage({
             </div>
           </div>
         )}
-        
+
         <p className="text-sm leading-relaxed break-words whitespace-pre-wrap mb-2">
           {text}
         </p>
-        
+
         {Object.keys(reactions).length > 0 && (
           <div className="flex gap-1 mb-2">
             {Object.entries(reactions).map(([emoji, { count, users }]) => {
-              const hasReacted = currentUserId ? users.includes(currentUserId) : false;
-              
+              const hasReacted = currentUserId
+                ? users.includes(currentUserId)
+                : false;
+
               return (
                 <button
                   key={emoji}
                   className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-all duration-200 ${
-                    hasReacted 
-                      ? 'bg-[var(--typecircle-green)]/20 border border-[var(--typecircle-green)]/40 text-[var(--typecircle-green)] hover:bg-[var(--typecircle-green)]/30' 
-                      : 'bg-muted/30 hover:bg-muted/50'
+                    hasReacted
+                      ? "bg-[var(--typecircle-green)]/20 border border-[var(--typecircle-green)]/40 text-[var(--typecircle-green)] hover:bg-[var(--typecircle-green)]/30"
+                      : "bg-muted/30 hover:bg-muted/50"
                   }`}
                   onClick={() => handleReaction(emoji)}
-                  title={hasReacted ? 'Click to remove your reaction' : 'Click to add reaction'}
+                  title={
+                    hasReacted
+                      ? "Click to remove your reaction"
+                      : "Click to add reaction"
+                  }
                 >
                   <span>{emoji}</span>
                   <span>{count}</span>
@@ -206,7 +235,7 @@ export function ChatMessage({
           </div>
         )}
       </div>
-      
+
       <div className="opacity-0 group-hover:opacity-100 sm:opacity-0 sm:group-hover:opacity-100 opacity-100 sm:opacity-0 transition-opacity flex gap-1">
         <Button
           size="sm"
@@ -228,13 +257,13 @@ export function ChatMessage({
           <MoreHorizontal className="w-3 h-3" />
         </Button>
       </div>
-      
+
       {showReactions && (
-        <div 
+        <div
+          ref={emojiPopupRef}
           className="absolute right-4 top-12 bg-background border border-border rounded-lg p-2 flex gap-1 shadow-lg z-10"
-          onClick={(e) => e.stopPropagation()}
         >
-          {REACTIONS.map(emoji => (
+          {REACTIONS.map((emoji) => (
             <button
               key={emoji}
               className="p-1 hover:bg-muted rounded text-lg transition-colors"
