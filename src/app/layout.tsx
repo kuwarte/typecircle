@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   title: "TypeCircle - Discover Your Enneagram Personality Type",
   description:
     "Take our comprehensive Enneagram personality assessment to discover your true self. Join a supportive community for personal growth and meaningful connections through the Enneagram system.",
+  verification: {
+    google: "BePFyA31FIHA1Xd6z6wDFUd7hOyJeyq8ClyEJmrZ0lk",
+  },
   keywords: [
     "enneagram",
     "personality test",
