@@ -229,7 +229,7 @@ export function FAQChatbot() {
       {!isOpen && (
         <Button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 w-14 h-14 rounded-full btn-typecircle shadow-lg z-50 !bg-[var(--typecircle-green)] !opacity-100"
+          className="fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg z-50 glass-button border-2 border-[var(--typecircle-green)]/30 bg-gradient-to-br from-[var(--typecircle-green)]/20 to-blue-500/20 backdrop-blur-md hover:from-[var(--typecircle-green)]/30 hover:to-blue-500/30 transition-all duration-200"
         >
           <MessageCircle className="w-6 h-6" />
         </Button>

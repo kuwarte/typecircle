@@ -51,7 +51,7 @@ export async function sendMessage(data: {
       reply_to: data.replyTo,
     })
     .select(
-      "id, text, created_at, author_id, author:user_profile (name, image_url)"
+      "id, text, created_at, author_id, reply_to, author:user_profile (name, image_url)"
     )
     .single();
 

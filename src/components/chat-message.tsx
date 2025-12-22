@@ -133,6 +133,9 @@ export function ChatMessage({
     if (!currentUserId) return;
 
     const hasReacted = reactions[emoji]?.users.includes(currentUserId);
+    const userHasAnyReaction = Object.values(reactions).some(reaction => 
+      reaction.users.includes(currentUserId)
+    );
 
     if (hasReacted) {
       await (supabase as any)
@@ -142,6 +145,16 @@ export function ChatMessage({
         .eq("user_id", currentUserId)
         .eq("emoji", emoji);
     } else {
+      // Remove any existing reaction first
+      if (userHasAnyReaction) {
+        await (supabase as any)
+          .from("message_reactions")
+          .delete()
+          .eq("message_id", id)
+          .eq("user_id", currentUserId);
+      }
+      
+      // Add new reaction
       await (supabase as any).from("message_reactions").upsert({
         message_id: id,
         user_id: currentUserId,
@@ -206,7 +219,7 @@ export function ChatMessage({
         </p>
 
         {Object.keys(reactions).length > 0 && (
-          <div className="flex gap-1 mb-2">
+          <div className="flex flex-wrap gap-1 mb-2">
             {Object.entries(reactions).map(([emoji, { count, users }]) => {
               const hasReacted = currentUserId
                 ? users.includes(currentUserId)
@@ -215,10 +228,10 @@ export function ChatMessage({
               return (
                 <button
                   key={emoji}
-                  className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-all duration-200 ${
+                  className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs transition-all duration-200 hover:scale-105 ${
                     hasReacted
-                      ? "bg-[var(--typecircle-green)]/20 border border-[var(--typecircle-green)]/40 text-[var(--typecircle-green)] hover:bg-[var(--typecircle-green)]/30"
-                      : "bg-muted/30 hover:bg-muted/50"
+                      ? "bg-[var(--typecircle-green)]/20 border border-[var(--typecircle-green)]/40 text-[var(--typecircle-green)] shadow-sm"
+                      : "bg-muted/30 hover:bg-muted/50 border border-transparent"
                   }`}
                   onClick={() => handleReaction(emoji)}
                   title={
@@ -227,8 +240,8 @@ export function ChatMessage({
                       : "Click to add reaction"
                   }
                 >
-                  <span>{emoji}</span>
-                  <span>{count}</span>
+                  <span className="text-sm">{emoji}</span>
+                  <span className="font-medium">{count}</span>
                 </button>
               );
             })}
