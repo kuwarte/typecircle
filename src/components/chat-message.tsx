@@ -133,7 +133,7 @@ export function ChatMessage({
     if (!currentUserId) return;
 
     const hasReacted = reactions[emoji]?.users.includes(currentUserId);
-    const userHasAnyReaction = Object.values(reactions).some(reaction => 
+    const userHasAnyReaction = Object.values(reactions).some((reaction) =>
       reaction.users.includes(currentUserId)
     );
 
@@ -145,7 +145,6 @@ export function ChatMessage({
         .eq("user_id", currentUserId)
         .eq("emoji", emoji);
     } else {
-      // Remove any existing reaction first
       if (userHasAnyReaction) {
         await (supabase as any)
           .from("message_reactions")
@@ -153,8 +152,7 @@ export function ChatMessage({
           .eq("message_id", id)
           .eq("user_id", currentUserId);
       }
-      
-      // Add new reaction
+
       await (supabase as any).from("message_reactions").upsert({
         message_id: id,
         user_id: currentUserId,
