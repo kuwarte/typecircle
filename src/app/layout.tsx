@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://typecircle.vercel.app"
   ),
-  title: "TypeCircle - Discover Your Enneagram Personality Type",
+  title: "Discover Your Enneagram Personality Type | TypeCircle",
   description:
     "Take our comprehensive Enneagram personality assessment to discover your true self. Join a supportive community for personal growth and meaningful connections through the Enneagram system.",
   verification: {
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   creator: "TypeCircle",
   publisher: "TypeCircle",
   openGraph: {
-    title: "TypeCircle - Discover Your Enneagram Personality Type",
+    title: "Discover Your Enneagram Personality Type | TypeCircle",
     description:
       "Take our comprehensive Enneagram personality assessment to discover your true self. Join a supportive community for personal growth and meaningful connections.",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://typecircle.vercel.app",

@@ -10,7 +10,7 @@ import {
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "TypeCircle - Discover Your Enneagram Personality Type",
+  title: "Discover Your Enneagram Personality Type | TypeCircle",
   description:
     "Start your journey of self-discovery with our comprehensive Enneagram personality assessment. Understand your core motivations, fears, and growth opportunities.",
   keywords: [
