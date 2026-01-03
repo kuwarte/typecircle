@@ -143,7 +143,7 @@ export default function Test() {
   if (showResults && result) {
     const resultType = enneagramTypes[result as keyof typeof enneagramTypes];
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center px-1 md:px-4 bg-gradient-to-b from-background via-background to-muted/10">
+      <div className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center py-12 md:py-0 px-1 md:px-4 bg-gradient-to-b from-background via-background to-muted/10">
         <div className="max-w-2xl mx-auto text-center w-full">
           <div className="glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-8 mb-8">
             <div className="mb-6">
@@ -208,7 +208,7 @@ export default function Test() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center px-1 md:px-6 bg-gradient-to-b from-background via-background to-muted/10">
+    <div className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center py-12 md:py-0 px-1 md:px-6 bg-gradient-to-b from-background via-background to-muted/10">
       <div className="max-w-2xl mx-auto w-full">
         <div className="glass-card rounded-3xl p-8">
           <div className="mb-8">

@@ -81,7 +81,7 @@ export default function EnneagramFAQ() {
           <div className="lg:col-span-3">
             {activeSection === "general" && (
               <div className="space-y-6">
-                <h2 className="text-2xl font-semibold text-foreground mb-6">
+                <h2 className="text-2xl font-semibold text-foreground mb-6 text-center md:text-left">
                   Frequently Asked Questions
                 </h2>
                 {enneagramFAQ.general.map((faq, index) => (

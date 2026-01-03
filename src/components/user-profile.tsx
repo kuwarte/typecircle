@@ -44,7 +44,7 @@ export function UserProfileModal({
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-md bg-background/60 backdrop-blur-xl border border-border text-foreground">
-        <div className="absolute inset-0 bg-background/60 pointer-events-none rounded-lg" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--typecircle-green)]/30 to-bg-background pointer-events-none rounded-lg" />
 
         <div className="relative z-10">
           <DialogHeader className="text-center pb-6">
