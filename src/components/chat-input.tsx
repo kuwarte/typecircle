@@ -117,10 +117,10 @@ export function ChatInput({
           <button
             type="submit"
             disabled={!message.trim()}
-            className="btn-typecircle flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+            className="btn-typecircle flex items-center justify-center w-12 h-12 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
             aria-label="Send message"
           >
-            <SendIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+            <SendIcon className="w-5 h-5" />
           </button>
         </div>
       </div>

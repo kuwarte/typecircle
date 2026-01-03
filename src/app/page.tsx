@@ -95,7 +95,7 @@ export default function Home() {
 
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-gradient-to-b from-muted/10 via-background to-background">
         <div className="max-w-7xl mx-auto">
-          <div className="glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-12 relative overflow-hidden">
+          <div className="glass-card-only rounded-2xl sm:rounded-3xl p-6 sm:p-12 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-[var(--typecircle-green)]/5 via-transparent to-blue-500/5 pointer-events-none" />
 
             <div className="relative z-10">

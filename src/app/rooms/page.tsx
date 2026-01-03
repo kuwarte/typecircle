@@ -58,7 +58,7 @@ async function RoomsContent() {
 
   if (publicRooms.length === 0 && joinedRooms.length === 0) {
     return (
-      <div className="container mx-auto max-w-3xl px-4 py-8 space-y-8">
+      <div className="container mx-auto max-w-3xl px-1 md:px-4 py-8 space-y-8">
         <Empty className="border border-dashed">
           <EmptyHeader>
             <EmptyMedia>
@@ -81,7 +81,7 @@ async function RoomsContent() {
 
   return (
     <div className="min-h-screen py-8 bg-gradient-to-b from-background via-background to-muted/10">
-      <div className="container mx-auto px-6 max-w-7xl">
+      <div className="container mx-auto px-2 md:px-6 max-w-7xl">
         <div className="glass-card rounded-3xl p-8 mb-12 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[var(--typecircle-green)]/5 via-transparent to-blue-500/5 pointer-events-none" />
           <div className="relative z-10">
@@ -120,7 +120,7 @@ async function RoomsContent() {
           <RoomList
             title="Discover New Communities"
             rooms={publicRooms.filter(
-              (room) => !joinedRooms.some((r) => r.id === room.id),
+              (room) => !joinedRooms.some((r) => r.id === room.id)
             )}
           />
         </div>
@@ -142,7 +142,7 @@ function RoomList({
 
   return (
     <section>
-      <h2 className="text-xl font-semibold mb-6 text-foreground border-b border-border pb-3">
+      <h2 className="text-2xl md:text-xl font-semibold mb-6 text-center md:text-left text-foreground border-b border-border pb-3">
         {title}
       </h2>
 
@@ -168,17 +168,14 @@ function RoomCard({
   isJoined: boolean;
 }) {
   return (
-    <div className="glass-card rounded-2xl p-6 transition-all duration-200 hover:bg-white/5 flex flex-col h-full">
+    <div className="glass-card-only rounded-2xl p-6 transition-all duration-200 hover:bg-white/5 flex flex-col h-full">
       <div className="mb-4 flex-1">
         <h3 className="text-lg font-semibold capitalize mb-2 text-[var(--typecircle-green)]">
           {name}
         </h3>
 
         <div className="flex items-center gap-2 mb-3">
-          <Badge
-            variant="secondary"
-            className="px-3 py-1 rounded-full text-xs font-medium"
-          >
+          <Badge className="px-3 py-1 rounded-full text-xs font-medium bg-[var(--typecircle-green)]/20 text-[var(--typecircle-green)] border-[var(--typecircle-green)]/30">
             {memberCount} {memberCount === 1 ? "member" : "members"}
           </Badge>
           {isJoined && (
@@ -269,7 +266,7 @@ async function getJoinedRooms(userId: string) {
 
   return (data as any[])
     .filter((room) =>
-      (room.chat_room_member ?? []).some((u: any) => u.member_id === userId),
+      (room.chat_room_member ?? []).some((u: any) => u.member_id === userId)
     )
     .map((room) => ({
       id: room.id,

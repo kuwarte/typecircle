@@ -29,7 +29,7 @@ export default function EnneagramFAQ() {
 
   return (
     <div className="min-h-screen py-8 bg-gradient-to-b from-background via-background to-muted/10">
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="container mx-auto px-1 md:px-6 max-w-6xl">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-[var(--typecircle-green)]/10 border-2 border-[var(--typecircle-green)]/20">
             <BookOpen className="w-8 h-8 text-[var(--typecircle-green)]" />
@@ -116,7 +116,7 @@ export default function EnneagramFAQ() {
 
             {activeSection === "types" && (
               <div className="space-y-6">
-                <h2 className="text-2xl font-semibold text-foreground mb-6">
+                <h2 className="text-2xl font-semibold text-foreground mb-6 text-center md:text-left">
                   Enneagram Types Deep Dive
                 </h2>
                 <div className="grid gap-6">
@@ -128,7 +128,7 @@ export default function EnneagramFAQ() {
                     return (
                       <div key={typeNum} className="glass-card rounded-2xl p-6">
                         <div className="flex items-start gap-4 mb-6">
-                          <div className="w-12 h-12 rounded-full bg-[var(--typecircle-green)]/20 flex items-center justify-center">
+                          <div className="w-12 h-12 p-2 md:p-0 rounded-full bg-[var(--typecircle-green)]/20 flex items-center justify-center">
                             <span className="text-xl font-bold text-[var(--typecircle-green)]">
                               {typeNum}
                             </span>
