@@ -7,6 +7,7 @@ import { FaRegCircle } from "react-icons/fa";
 import { Button } from "./ui/button";
 import { enneagramFAQ } from "@/data/enneagram-faq";
 import { enneagramTypes } from "@/data/enneagram-questions";
+import { useRouter } from "next/navigation";
 
 interface Message {
   id: string;
@@ -18,6 +19,8 @@ interface Message {
 export function FAQChatbot() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+
+  const router = useRouter();
 
   const shouldHide = pathname.startsWith("/rooms");
   const [messages, setMessages] = useState<Message[]>([
@@ -46,8 +49,31 @@ export function FAQChatbot() {
     "How do types relate to each other?",
   ];
 
+  const COMMAND_HELP_TEXT = `🧭 Available Commands 🧭
+
+/help or /?  
+💡 Display this help menu with available commands.
+
+/clear  
+🧹 Clear the entire chat history to start fresh.
+
+/taketest 
+📝 Go to the Enneagram Test and answer questions to discover your personality type.
+
+Tips for using the chatbot:  
+• Type "/" anytime to see available commands.  
+• Ask questions naturally, e.g., "Tell me about Type 4" or "What are wings?".  
+• Combine commands and questions for faster navigation.
+
+Happy exploring your Enneagram journey! 🌟
+`;
+
   const findAnswer = (question: string): string => {
     const q = question.toLowerCase().trim();
+
+    if (q.includes("who")) {
+      return "👋 Hello my name is Jasper, your Enneagram Assistant!\n\n😊 I'm here to guide your questions.\n\n\(￣︶￣*\))\nJust ask me about Enneagram question.";
+    }
 
     if (
       q.length < 3 ||
@@ -125,7 +151,7 @@ export function FAQChatbot() {
       q.includes("find my type") ||
       q.includes("personality")
     ) {
-      return "📝 Discover Your Enneagram Type\n\nOur comprehensive assessment helps you identify your core personality type through:\n\n✨ What Makes It Accurate:\n• 45 carefully crafted questions\n• Focus on core motivations & fears\n• Based on Enneagram Institute research\n• Considers behavioral patterns\n\n🎯 What You'll Learn:\n• Your primary type (1-9)\n• Core motivations and fears\n• Growth and stress patterns\n• Personalized insights\n\n📍 Ready to start? Head to the Assessment section in the navigation to begin your journey of self-discovery!";
+      return "📝 Discover Your Enneagram Type\n\nOur comprehensive assessment helps you identify your core personality type through:\n\n✨ What Makes It Accurate:\n• 45 carefully crafted questions\n• Focus on core motivations & fears\n• Based on Enneagram Institute research\n• Considers behavioral patterns\n\n🎯 What You'll Learn:\n• Your primary type (1-9)\n• Core motivations and fears\n• Growth and stress patterns\n• Personalized insights\n\n📍 Ready to start? Head to the Assessment section in the navigation to begin your journey of self-discovery!\n\nℹ️ Tip: Try typing the command --> /taketest";
     }
 
     if (
@@ -176,7 +202,7 @@ export function FAQChatbot() {
       const questionWords = q.split(" ");
       if (
         questionWords.some((word) =>
-          faqWords.some((faqWord) => faqWord.includes(word) && word.length > 2)
+          faqWords.some((faqWord) => faqWord.includes(word) && word.length > 2),
         )
       ) {
         return faq.answer;
@@ -184,9 +210,9 @@ export function FAQChatbot() {
     }
 
     const fallbacks = [
-      "🤔 I'd love to help you explore that further!\n\nI specialize in Enneagram wisdom. Here's what I can guide you through:\n\n🎯 Core Topics:\n• All 9 personality types\n• Wings & subtypes\n• Growth & stress patterns\n• Assessment guidance\n\n💡 Try asking:\n• Tell me about Type [1-9]\n• What are wings?\n• How do I find my type?\n• What's my growth path?",
-      "✨ Great question! I'm your dedicated Enneagram guide.\n\nI can help you understand:\n• Personality type descriptions\n• Motivations and fears\n• Personal growth paths\n• How to take the assessment\n\nWhat aspect of the Enneagram interests you most?",
-      "🌟 I'm here to illuminate your Enneagram journey!\n\nWhether you're curious about:\n• Finding your type\n• Understanding relationships\n• Personal development\n• Type dynamics\n\nJust ask! I'm designed to make the Enneagram accessible and meaningful for you.",
+      "🤔 Your question is a bit vague...\n\nI specialize in Enneagram wisdom. Here's what I can guide you through:\n\n🎯 Core Topics:\n• All 9 personality types\n• Wings & subtypes\n• Growth & stress patterns\n• Assessment guidance\n\n💡 Try asking:\n• Tell me about Type [1-9]\n• What are wings?\n• How do I find my type?\n• What's my growth path?\n\n\nℹ️ Tip: You can open the suggestion at the top right corner of the chat!",
+      "🤔 Your question is a bit vague...\n\nI can help you understand:\n• Personality type descriptions\n• Motivations and fears\n• Personal growth paths\n• How to take the assessment\n\nWhat aspect of the Enneagram interests you most?\n\n\nℹ️ Tip: You can open the suggestion at the top right corner of the chat!",
+      "🤔 Your question is a bit vague...\n\nI'm here to illuminate your Enneagram journey!\n\nWhether you're curious about:\n• Finding your type\n• Understanding relationships\n• Personal development\n• Type dynamics\n\nJust ask! I'm designed to make the Enneagram accessible and meaningful for you.\n\n\nℹ️ Tip: You can open the suggestion at the top right corner of the chat!",
     ];
 
     return fallbacks[Math.floor(Math.random() * fallbacks.length)];
@@ -194,6 +220,48 @@ export function FAQChatbot() {
 
   const handleSend = async () => {
     if (!input.trim()) return;
+
+    if (
+      input.trim() === "/" ||
+      input.trim() === "/?" ||
+      input.trim() === "/help"
+    ) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          text: COMMAND_HELP_TEXT,
+          isBot: true,
+          timestamp: new Date(),
+        },
+      ]);
+      setInput("");
+      setShowSuggestions(false);
+      return;
+    }
+
+    if (input === "/clear") {
+      setMessages(() => []);
+      setInput("");
+      return;
+    }
+
+    if (input === "/taketest") {
+      router.push("/enneagram/test");
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          text: "🧭 We are now here in the ENNEAGRAM ASSESSMENT PAGE.\n\n🧑‍🦰 Just answer the required questions and discover your personality type.",
+          isBot: true,
+          timestamp: new Date(),
+        },
+      ]);
+
+      setInput("");
+      return;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),

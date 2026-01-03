@@ -76,9 +76,12 @@ export default function Footer() {
                 loginDooM
               </a>
             </div>
-            <p className="text-xs text-muted-foreground">
-              © 2024 TypeCircle. All rights reserved.
-            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-muted-foreground text-xs mt-2 sm:mt-0">
+              <p>© 2024 TypeCircle. All rights reserved.</p>
+              <p className="text-[var(--typecircle-green)] ">
+                For educational purposes only
+              </p>
+            </div>
           </div>
         </div>
       </div>

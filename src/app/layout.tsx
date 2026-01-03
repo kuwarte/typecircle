@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     siteName: "TypeCircle",
     images: [
       {
-        url: "/og-image.png",
+        url: "/icon.svg",
         width: 1200,
         height: 630,
         alt: "TypeCircle - Enneagram Personality Assessment",
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     title: "TypeCircle - Discover Your Enneagram Personality Type",
     description:
       "Take our comprehensive Enneagram personality assessment to discover your true self.",
-    images: ["/og-image.png"],
+    images: ["/icon.svg"],
     creator: "@typecircle",
   },
   robots: {
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/favicon.svg",
+    icon: "/icon.svg",
   },
   other: {
     "application/ld+json": JSON.stringify({
@@ -95,8 +95,8 @@ export const metadata: Metadata = {
         priceCurrency: "USD",
       },
       creator: {
-        "@type": "Organization",
-        name: "TypeCircle",
+        "@type": "Person",
+        name: "kuwarte",
       },
     }),
   },

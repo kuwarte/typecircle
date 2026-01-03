@@ -28,7 +28,7 @@ export function ChatInput({
 }: Props) {
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isTyping) {
@@ -36,10 +36,10 @@ export function ChatInput({
         onTyping?.(false);
       }
     }, 1000);
-    
+
     return () => clearTimeout(timer);
   }, [message, isTyping, onTyping]);
-  
+
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
     if (!isTyping && e.target.value.trim()) {
@@ -57,7 +57,12 @@ export function ChatInput({
     onClearReply?.();
     const id = crypto.randomUUID();
     onSend({ id, text, replyTo: replyTo?.id });
-    const result = await sendMessage({ id, text, roomId, replyTo: replyTo?.id });
+    const result = await sendMessage({
+      id,
+      text,
+      roomId,
+      replyTo: replyTo?.id,
+    });
     console.log("sendMessage result:", result);
     if (result.error) {
       toast.error(result.message);
@@ -91,14 +96,16 @@ export function ChatInput({
             </p>
           </div>
         )}
-        
+
         <div className="flex items-end gap-2 sm:gap-3">
           <div className="flex-1">
             <InputGroupTextarea
-              placeholder={replyTo ? "Reply to message..." : "Type your message..."}
+              placeholder={
+                replyTo ? "Reply to message..." : "Type your message..."
+              }
               value={message}
               onChange={handleInputChange}
-              className="w-full min-h-[40px] sm:min-h-[44px] max-h-32 bg-transparent border-0 resize-none text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 text-sm leading-relaxed"
+              className="w-full min-h-[40px] sm:min-h-[44px] max-h-32 bg-transparent border-0 resize-none text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0 text-sm leading-relaxed break-words rounded-lg"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();

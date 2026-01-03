@@ -6,7 +6,6 @@ import { MessageCircle, Users } from "lucide-react";
 export default function MessageLoading() {
   return (
     <div className="h-screen bg-gradient-to-b from-background via-background to-muted/10 flex flex-col">
-      {/* Header */}
       <div className="border-b border-border bg-background/80 backdrop-blur-sm p-4">
         <div className="flex items-center gap-3">
           <motion.div
@@ -23,7 +22,6 @@ export default function MessageLoading() {
         </div>
       </div>
 
-      {/* Messages Area */}
       <div className="flex-1 p-4 space-y-4 overflow-hidden">
         <div className="text-center py-8">
           <motion.div
@@ -55,7 +53,6 @@ export default function MessageLoading() {
           </motion.div>
         </div>
 
-        {/* Skeleton Messages */}
         {[1, 2, 3].map((i) => (
           <div key={i} className="flex gap-3 animate-pulse">
             <div className="w-8 h-8 bg-muted/20 rounded-full flex-shrink-0" />
@@ -67,7 +64,6 @@ export default function MessageLoading() {
         ))}
       </div>
 
-      {/* Input Area */}
       <div className="border-t border-border bg-background/80 backdrop-blur-sm p-4">
         <div className="flex gap-2">
           <div className="flex-1 h-10 bg-muted/20 rounded-lg animate-pulse" />
@@ -77,3 +73,4 @@ export default function MessageLoading() {
     </div>
   );
 }
+

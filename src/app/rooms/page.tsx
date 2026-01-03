@@ -13,13 +13,6 @@ import { createAdminClient } from "@/services/supabase/server";
 import { MessagesSquareIcon, MessageCircle, Edit3 } from "lucide-react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { LeaveRoomButton } from "@/components/leave-room-btn";
 import { JoinRoomButton } from "@/components/join-room-btn";
 import { FaPlus } from "react-icons/fa";
@@ -127,7 +120,7 @@ async function RoomsContent() {
           <RoomList
             title="Discover New Communities"
             rooms={publicRooms.filter(
-              (room) => !joinedRooms.some((r) => r.id === room.id)
+              (room) => !joinedRooms.some((r) => r.id === room.id),
             )}
           />
         </div>
@@ -276,7 +269,7 @@ async function getJoinedRooms(userId: string) {
 
   return (data as any[])
     .filter((room) =>
-      (room.chat_room_member ?? []).some((u: any) => u.member_id === userId)
+      (room.chat_room_member ?? []).some((u: any) => u.member_id === userId),
     )
     .map((room) => ({
       id: room.id,

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Sparkles } from "lucide-react";
+import { Brain } from "lucide-react";
 
 export default function AssessmentLoading() {
   return (
@@ -20,7 +20,7 @@ export default function AssessmentLoading() {
           >
             <Brain className="w-10 h-10 text-[var(--typecircle-green)]" />
           </motion.div>
-          
+
           <motion.h2
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -29,7 +29,7 @@ export default function AssessmentLoading() {
           >
             Analyzing Your Results
           </motion.h2>
-          
+
           <motion.p
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -38,7 +38,7 @@ export default function AssessmentLoading() {
           >
             Processing your responses to determine your Enneagram type...
           </motion.p>
-          
+
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -63,3 +63,4 @@ export default function AssessmentLoading() {
     </div>
   );
 }
+

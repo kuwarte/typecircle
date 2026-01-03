@@ -1,12 +1,18 @@
-import { Card } from "@/components/ui/card";
+import FeatureCard from "@/components/feature-card";
 import Link from "next/link";
-import { FaComments, FaRegCircle, FaUser, FaUsers } from "react-icons/fa";
+import {
+  FaComments,
+  FaRegCircle,
+  FaUser,
+  FaUsers,
+  FaArrowRight,
+} from "react-icons/fa";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Home | TypeCircle - Discover Your Enneagram Personality Type",
+  title: "TypeCircle - Discover Your Enneagram Personality Type",
   description:
-    "Start your journey of self-discovery with our comprehensive Enneagram personality assessment. Understand your core motivations, fears, and growth opportunities. Join thousands in personal development.",
+    "Start your journey of self-discovery with our comprehensive Enneagram personality assessment. Understand your core motivations, fears, and growth opportunities.",
   keywords: [
     "enneagram test",
     "personality assessment",
@@ -16,9 +22,9 @@ export const metadata: Metadata = {
     "personality quiz",
   ],
   openGraph: {
-    title: "Discover Your True Self Through the Enneagram | TypeCircle",
+    title: "Discover Your True Self with the Enneagram | TypeCircle",
     description:
-      "Take our scientific Enneagram assessment to unlock deeper understanding of yourself and connect with others on similar journeys.",
+      "Take our Enneagram assessment to better understand your personality, motivations, and growth opportunities while connecting with others on similar journeys.",
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://typecircle.vercel.app",
     images: [
       {
@@ -30,34 +36,6 @@ export const metadata: Metadata = {
     ],
   },
 };
-
-function FeatureCard({
-  icon,
-  title,
-  description,
-  href,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  href: string;
-}) {
-  return (
-    <Link href={href} className="group block">
-      <div className="glass-card rounded-xl sm:rounded-2xl p-6 sm:p-8 h-full transition-all duration-200 group-hover:bg-white/5">
-        <div className="text-center">
-          <div className="mb-4 sm:mb-6">{icon}</div>
-          <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-foreground">
-            {title}
-          </h3>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-            {description}
-          </p>
-        </div>
-      </div>
-    </Link>
-  );
-}
 
 export default function Home() {
   return (
@@ -78,19 +56,18 @@ export default function Home() {
 
           <div className="mb-8 sm:mb-10">
             <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-4 sm:mb-6 px-4">
-              Understanding your personality type is the first step toward
-              personal growth, better relationships, and meaningful connections.
-              Join thousands who have discovered their Enneagram type and
-              transformed their lives.
+              Learn your personality type and take steps toward personal growth,
+              stronger relationships, and meaningful connections. Join thousands
+              who have explored their Enneagram type.
             </p>
             <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-3 sm:gap-6 text-sm text-muted-foreground px-4">
               <span className="flex items-center justify-center gap-2">
                 <div className="w-2 h-2 bg-[var(--typecircle-green)] rounded-full"></div>
-                Scientific Assessment
+                Simple Assessment
               </span>
               <span className="flex items-center justify-center gap-2">
                 <div className="w-2 h-2 bg-[var(--typecircle-green)] rounded-full"></div>
-                Personalized Results
+                Clear Results
               </span>
               <span className="flex items-center justify-center gap-2">
                 <div className="w-2 h-2 bg-[var(--typecircle-green)] rounded-full"></div>
@@ -130,8 +107,8 @@ export default function Home() {
                   Your Journey to Self-Discovery
                 </h2>
                 <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed px-4">
-                  A simple three-step process to unlock deeper understanding of
-                  yourself and connect with others
+                  Follow three simple steps to understand yourself and connect
+                  with others.
                 </p>
               </div>
 
@@ -141,7 +118,7 @@ export default function Home() {
                     <FaUser className="text-4xl text-[var(--typecircle-green)]" />
                   }
                   title="Take the Assessment"
-                  description="Complete our comprehensive Enneagram test designed by personality experts to accurately identify your type and core motivations."
+                  description="Complete our easy Enneagram test to find your type and understand your motivations."
                   href="/enneagram/test"
                 />
                 <FeatureCard
@@ -149,7 +126,7 @@ export default function Home() {
                     <FaUsers className="text-4xl text-[var(--typecircle-green)]" />
                   }
                   title="Learn About Types"
-                  description="Explore comprehensive guides about all 9 Enneagram types, wings, subtypes, and growth paths to deepen your understanding."
+                  description="Read about all 9 Enneagram types, wings, and growth paths to better understand yourself."
                   href="/enneagram/faq"
                 />
                 <FeatureCard
@@ -157,7 +134,7 @@ export default function Home() {
                     <FaComments className="text-4xl text-[var(--typecircle-green)]" />
                   }
                   title="Grow Together"
-                  description="Engage in supportive discussions, share experiences, and learn from others on similar journeys of personal development."
+                  description="Join discussions, share experiences, and learn from others in the community."
                   href="/rooms"
                 />
               </div>

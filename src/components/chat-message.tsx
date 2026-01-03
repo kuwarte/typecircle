@@ -4,10 +4,6 @@ import { User2Icon, Reply, MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import { Ref, useState, useEffect, useRef } from "react";
 import { Button } from "./ui/button";
-import {
-  addReaction,
-  removeReaction,
-} from "@/services/supabase/actions/reactions";
 import { createClient } from "@/services/supabase/client";
 import { EnneagramBadge } from "./enneagram-badge";
 
@@ -41,6 +37,7 @@ export function ChatMessage({
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [replyToMessage, setReplyToMessage] = useState<{
     author: string;
+    author_id?: string;
     text: string;
   } | null>(null);
   const supabase = createClient();
@@ -73,13 +70,14 @@ export function ChatMessage({
     if (reply_to) {
       supabase
         .from("message")
-        .select("text, author:user_profile(name)")
+        .select("text, author:user_profile(name), author_id")
         .eq("id", reply_to)
         .single()
         .then(({ data }) => {
           if (data) {
             setReplyToMessage({
               author: data.author?.name || "User",
+              author_id: data.author_id,
               text: data.text,
             });
           }
@@ -137,7 +135,16 @@ export function ChatMessage({
       reaction.users.includes(currentUserId)
     );
 
+    let newReactions = { ...reactions };
+
     if (hasReacted) {
+      newReactions[emoji].count--;
+      newReactions[emoji].users = newReactions[emoji].users.filter(
+        (id) => id !== currentUserId
+      );
+      if (newReactions[emoji].count === 0) delete newReactions[emoji];
+      setReactions(newReactions);
+
       await (supabase as any)
         .from("message_reactions")
         .delete()
@@ -162,6 +169,13 @@ export function ChatMessage({
 
     setShowReactions(false);
   };
+
+  const displayName =
+    currentUserId === author_id ? "You" : author?.name || "User";
+  const replyDisplayName =
+    replyToMessage?.author_id === currentUserId
+      ? "You"
+      : replyToMessage?.author;
 
   return (
     <div
@@ -191,7 +205,7 @@ export function ChatMessage({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-xs sm:text-sm font-medium text-[var(--typecircle-green)] truncate">
-            {author?.name}
+            {displayName}
           </span>
           {author?.enneagram_type && (
             <EnneagramBadge type={author.enneagram_type} />
@@ -204,7 +218,7 @@ export function ChatMessage({
         {replyToMessage && (
           <div className="mb-2 pl-3 border-l-2 border-[var(--typecircle-green)]/30 bg-muted/20 rounded-r-lg p-2">
             <div className="text-xs text-[var(--typecircle-green)] font-medium mb-1">
-              Replying to {replyToMessage.author}
+              Replying to {replyDisplayName}
             </div>
             <div className="text-xs text-muted-foreground truncate">
               {replyToMessage.text}
