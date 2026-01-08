@@ -49,114 +49,126 @@ export default function NewRoomPage() {
   }
 
   return (
-    <div className="container mt-10 mx-auto px-4 py-8">
-      <Card className="w-full max-w-lg mx-auto">
-        <CardHeader>
-          <CardTitle>New Room</CardTitle>
-          <CardDescription>Create a new chat room</CardDescription>
-        </CardHeader>
+    <div className="bg-gradient-to-t from-muted/90 via-background/30 to-background">
+      <div className="min-h-screen py-8 bg-gradient-to-b from-muted/10 via-background/30 to-background">
+        <div className="container mt-10 mx-auto px-4 py-8">
+          <Card className="w-full max-w-lg mx-auto ">
+            <CardHeader>
+              <CardTitle>New Room</CardTitle>
+              <CardDescription>Create a new chat room</CardDescription>
+            </CardHeader>
 
-        <CardContent>
-          <form onSubmit={form.handleSubmit(handleSubmit)}>
-            <FieldGroup>
-              <Controller
-                name="name"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Room Name</FieldLabel>
-                    <Input
-                      {...field}
-                      id={field.name}
-                      aria-invalid={fieldState.invalid}
-                    />
-                    {fieldState.error && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
-
-              <Field>
-                <FieldLabel>Tags</FieldLabel>
-                <div className="flex flex-wrap gap-2">
-                  {TAG_OPTIONS.map((tag) => {
-                    const selected = form.watch("tags").includes(tag);
-                    return (
-                      <label key={tag} className="cursor-pointer select-none">
-                        <input
-                          type="checkbox"
-                          className="hidden"
-                          checked={selected}
-                          onChange={(e) => {
-                            const newTags = e.target.checked
-                              ? [...form.getValues("tags"), tag]
-                              : form.getValues("tags").filter((t) => t !== tag);
-                            form.setValue("tags", newTags);
-                          }}
+            <CardContent>
+              <form onSubmit={form.handleSubmit(handleSubmit)}>
+                <FieldGroup>
+                  <Controller
+                    name="name"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor={field.name}>Room Name</FieldLabel>
+                        <Input
+                          {...field}
+                          id={field.name}
+                          aria-invalid={fieldState.invalid}
                         />
-                        <Badge
-                          variant="outline"
-                          className={`px-2 py-1 rounded-sm transition-colors duration-200 ${
-                            selected ? "bg-foreground text-card" : ""
-                          }`}
-                        >
-                          {tag}
-                        </Badge>
-                      </label>
-                    );
-                  })}
-                </div>
-              </Field>
+                        {fieldState.error && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
 
-              <Controller
-                name="isPublic"
-                control={form.control}
-                render={({
-                  field: { value, onChange, ...field },
-                  fieldState,
-                }) => (
-                  <Field
-                    orientation="horizontal"
-                    data-invalid={fieldState.invalid}
-                  >
-                    <Checkbox
-                      {...field}
-                      id={field.name}
-                      checked={value}
-                      onCheckedChange={onChange}
-                      aria-invalid={fieldState.invalid}
-                    />
-                    <FieldContent>
-                      <FieldLabel className="font-normal" htmlFor={field.name}>
-                        Public Room
-                      </FieldLabel>
-                      {fieldState.error && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </FieldContent>
+                  <Field>
+                    <FieldLabel>Tags</FieldLabel>
+                    <div className="flex flex-wrap gap-2">
+                      {TAG_OPTIONS.map((tag) => {
+                        const selected = form.watch("tags").includes(tag);
+                        return (
+                          <label
+                            key={tag}
+                            className="cursor-pointer select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              className="hidden"
+                              checked={selected}
+                              onChange={(e) => {
+                                const newTags = e.target.checked
+                                  ? [...form.getValues("tags"), tag]
+                                  : form
+                                      .getValues("tags")
+                                      .filter((t) => t !== tag);
+                                form.setValue("tags", newTags);
+                              }}
+                            />
+                            <Badge
+                              variant="outline"
+                              className={`px-2 py-1 rounded-sm transition-colors duration-200 ${
+                                selected ? "bg-foreground text-card" : ""
+                              }`}
+                            >
+                              {tag}
+                            </Badge>
+                          </label>
+                        );
+                      })}
+                    </div>
                   </Field>
-                )}
-              />
 
-              <Field orientation="horizontal" className="w-full">
-                <Button
-                  type="submit"
-                  className="grow"
-                  disabled={form.formState.isSubmitting}
-                >
-                  <LoadingSwap isLoading={form.formState.isSubmitting}>
-                    Create Room
-                  </LoadingSwap>
-                </Button>
-                <Button variant="outline" asChild>
-                  <Link href="/rooms">Cancel</Link>
-                </Button>
-              </Field>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
+                  <Controller
+                    name="isPublic"
+                    control={form.control}
+                    render={({
+                      field: { value, onChange, ...field },
+                      fieldState,
+                    }) => (
+                      <Field
+                        orientation="horizontal"
+                        data-invalid={fieldState.invalid}
+                      >
+                        <Checkbox
+                          {...field}
+                          id={field.name}
+                          checked={value}
+                          onCheckedChange={onChange}
+                          aria-invalid={fieldState.invalid}
+                        />
+                        <FieldContent>
+                          <FieldLabel
+                            className="font-normal"
+                            htmlFor={field.name}
+                          >
+                            Public Room
+                          </FieldLabel>
+                          {fieldState.error && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </FieldContent>
+                      </Field>
+                    )}
+                  />
+
+                  <Field orientation="horizontal" className="w-full">
+                    <Button
+                      type="submit"
+                      className="grow"
+                      disabled={form.formState.isSubmitting}
+                    >
+                      <LoadingSwap isLoading={form.formState.isSubmitting}>
+                        Create Room
+                      </LoadingSwap>
+                    </Button>
+                    <Button variant="outline" asChild>
+                      <Link href="/rooms">Cancel</Link>
+                    </Button>
+                  </Field>
+                </FieldGroup>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }

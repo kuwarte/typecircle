@@ -14,9 +14,9 @@ export function LogoutButton({ className }: { className?: string }) {
   };
 
   return (
-    <Button 
-      onClick={logout} 
-      className={`glass-button hover:!bg-red-600 hover:!text-white hover:!border-red-600 transition-colors ${className}`}
+    <Button
+      onClick={logout}
+      className={`hover:!text-red-400 transition-colors ${className}`}
     >
       Logout
     </Button>

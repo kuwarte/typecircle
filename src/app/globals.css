@@ -96,6 +96,8 @@
     ),
     linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   --typecircle-green: oklch(45% 0.12 135.839);
+  --dialog-bg-light: 255 255 255;
+  --dialog-bg-dark: 255 255 255 / 0.6;
 }
 
 .dark {
@@ -147,6 +149,7 @@
     ),
     linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   --typecircle-green: oklch(75% 0.16 135.839);
+  --dialog-bg-dark: var(--background) / 0.6;
 }
 
 @layer base {
@@ -280,6 +283,18 @@
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+.glass-card-room {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(200, 200, 200, 0.6);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
 .glass-card {
   background: linear-gradient(
     145deg,
@@ -320,6 +335,18 @@
 }
 
 .dark .glass-card-only {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.dark .glass-card-room {
   background: linear-gradient(
     145deg,
     rgba(255, 255, 255, 0.12) 0%,
@@ -519,6 +546,12 @@
 .glass-button {
   background: var(--glass-light);
   backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border-light);
+  transition: all 0.2s ease;
+}
+
+.glass-room-button {
+  background: var(--glass-light);
   border: 1px solid var(--glass-border-light);
   transition: all 0.2s ease;
 }
