@@ -49,7 +49,10 @@ export default function RoomsLoading() {
             <div className="h-6 bg-muted/20 rounded w-32 mb-6 animate-pulse" />
             <div className="grid gap-6 grid-cols-[repeat(auto-fill,minmax(320px,1fr))]">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="glass-card rounded-2xl p-6 animate-pulse">
+                <div
+                  key={i}
+                  className="glass-card rounded-2xl p-6 animate-pulse"
+                >
                   <div className="h-6 bg-muted/20 rounded w-3/4 mb-4" />
                   <div className="h-4 bg-muted/20 rounded w-20 mb-3" />
                   <div className="flex gap-2 mb-4">
