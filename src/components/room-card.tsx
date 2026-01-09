@@ -24,7 +24,7 @@ export default function RoomCard({
 }) {
   return (
     <div className="h-full flex flex-col">
-      <div className="border border-zinc-400/50 dark:border-border dark:hover:bg-[var(--typecircle-green)]/5 rounded-2xl p-6 transition-all duration-200 flex flex-col h-full">
+      <div className="border border-zinc-400/50 dark:border-border dark:hover:bg-[var(--typecircle-green)]/5 rounded-2xl p-6 transition-all duration-200 flex flex-col h-full shadow-xl">
         <div className="mb-4 flex-1">
           <div className="flex items-start justify-between mb-3">
             <h3 className="text-lg font-semibold capitalize text-[var(--typecircle-green)]">
@@ -73,14 +73,27 @@ export default function RoomCard({
         <div className="flex gap-2 mt-auto">
           {isJoined ? (
             <>
-              <Button asChild className="flex-1 glass-room-button" size="sm">
+              <Button
+                asChild
+                variant="ghost"
+                className="
+  flex-1
+  bg-transparent
+  text-[var(--typecircle-green)]
+  hover:bg-[var(--typecircle-green)]/10
+  hover:text-[var(--typecircle-green)]
+  border-none
+  shadow-none
+"
+                size="sm"
+              >
                 <Link href={`/rooms/${id}`}>Enter Room</Link>
               </Button>
               <LeaveRoomButton
                 className="glass-subtle"
                 roomId={id}
                 size="sm"
-                variant="outline"
+                variant="ghost"
               >
                 Leave
               </LeaveRoomButton>
@@ -88,7 +101,15 @@ export default function RoomCard({
           ) : (
             <JoinRoomButton
               roomId={id}
-              className="w-full glass-button"
+              className="
+  flex-1
+  bg-transparent
+  text-[var(--typecircle-green)]
+  hover:bg-[var(--typecircle-green)]/10
+  hover:text-[var(--typecircle-green)]
+  border-none
+  shadow-none
+"
               size="sm"
             >
               {isPublic ? "Join Public Room" : "Join Room"}

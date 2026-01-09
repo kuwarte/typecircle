@@ -1,16 +1,15 @@
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/10">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <div className="glass-navbar rounded-2xl p-8 md:p-12 relative overflow-hidden shadow-2xl">
-          <div className="absolute inset-0 bg-gradient-to-br from-[var(--typecircle-green)]/10 via-transparent to-blue-500/10 pointer-events-none" />
+    <div className="min-h-screen bg-background/90">
+      <div className="glass-navbar container mx-auto px-4 py-12 max-w-4xl">
+        <div className="p-8 md:p-12 relative overflow-hidden">
           <div className="relative z-10">
             <div className="text-center mb-12">
               <h1 className="text-4xl font-semibold text-foreground mb-4">
                 Terms of Service
               </h1>
               <p className="text-muted-foreground text-lg">
-                Last updated: December 2024
+                Educational Project - Last updated: December 2024
               </p>
             </div>
 

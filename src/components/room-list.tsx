@@ -8,7 +8,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { MessageCircle, UserCheck } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import RoomCard from "./room-card";
 
 export default function RoomList({
@@ -37,11 +36,11 @@ export default function RoomList({
     ? "Rooms you've joined and actively participate in"
     : "Explore and join new communities based on your interests";
 
-  const showNavigation = rooms.length > 2;
+  const showNavigation = rooms.length > 3;
 
   return (
     <section className="space-y-8">
-      <div className="glass-card-only rounded-2xl px-6 py-12 border border-border/50">
+      <div className="rounded-2xl px-6 py-16 border border-border/50">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className=" flex-shrink-0 w-12 h-12 rounded-full bg-[var(--typecircle-green)]/10 border border-[var(--typecircle-green)]/20 flex items-center justify-center">
@@ -51,7 +50,7 @@ export default function RoomList({
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-1">
                 <h2 className="text-2xl font-bold text-foreground">{title}</h2>
               </div>
-              <p className="hidden md:flex text-sm text-muted-foreground italic">
+              <p className="flex text-xs md:text-sm text-muted-foreground italic">
                 {subtitle}
               </p>
             </div>
@@ -59,7 +58,7 @@ export default function RoomList({
         </div>
       </div>
 
-      <div className="grid gap-6 grid-cols-1 md:hidden">
+      <div className="grid gap-6 glass-card-only rounded-2xl px-4 py-4 grid-cols-1 md:hidden">
         {rooms.map((room) => (
           <RoomCard {...room} key={room.id} isJoined={isJoined} />
         ))}
@@ -69,11 +68,11 @@ export default function RoomList({
         <Carousel
           opts={{
             align: "start",
-            loop: true,
+            loop: false,
           }}
           className="w-full"
         >
-          <CarouselContent className="-ml-4 px-4 py-6">
+          <CarouselContent className="-ml-4 px-4 py-6 cursor-grab active:cursor-grabbing">
             {rooms.map((room) => (
               <CarouselItem
                 key={room.id}
