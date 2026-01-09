@@ -21,24 +21,36 @@ export default function Navbar() {
             href="/"
             className="flex items-center text-xl font-semibold gap-2 text-foreground transition-colors duration-200"
           >
-            <FaRegCircle
-              size={20}
-              className="text-[var(--typecircle-green)]"
-            />
+            <FaRegCircle size={20} className="text-[var(--typecircle-green)]" />
             <span>typecircle</span>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
-            <NavLink href="/" icon={<Home className="w-4 h-4" />}>Home</NavLink>
-            <NavLink href="/enneagram/test" icon={<Edit3 className="w-4 h-4" />}>Assessment</NavLink>
-            <NavLink href="/enneagram/faq" icon={<BookOpen className="w-4 h-4" />}>Guide</NavLink>
+            <NavLink href="/" icon={<Home className="w-4 h-4" />}>
+              Home
+            </NavLink>
+            <NavLink
+              href="/enneagram/test"
+              icon={<Edit3 className="w-4 h-4" />}
+            >
+              Assessment
+            </NavLink>
+            <NavLink
+              href="/enneagram/faq"
+              icon={<BookOpen className="w-4 h-4" />}
+            >
+              Guide
+            </NavLink>
             {user && (
-              <NavLink href="/rooms" icon={<MessageCircle className="w-4 h-4" />}>Community</NavLink>
+              <NavLink
+                href="/rooms"
+                icon={<MessageCircle className="w-4 h-4" />}
+              >
+                Community
+              </NavLink>
             )}
           </nav>
 
-          {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-3">
             {isLoading || !user ? (
               <Button asChild className="glass-button">
@@ -50,7 +62,6 @@ export default function Navbar() {
             <ModeToggle />
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center gap-2">
             <ModeToggle />
             <Button
@@ -59,33 +70,57 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </Button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden glass-navbar border-t border-border">
             <div className="container mx-auto px-4 py-4 space-y-2">
-              <MobileNavLink href="/" icon={<Home className="w-4 h-4" />} onClick={() => setMobileMenuOpen(false)}>
+              <MobileNavLink
+                href="/"
+                icon={<Home className="w-4 h-4" />}
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 Home
               </MobileNavLink>
-              <MobileNavLink href="/enneagram/test" icon={<Edit3 className="w-4 h-4" />} onClick={() => setMobileMenuOpen(false)}>
+              <MobileNavLink
+                href="/enneagram/test"
+                icon={<Edit3 className="w-4 h-4" />}
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 Assessment
               </MobileNavLink>
-              <MobileNavLink href="/enneagram/faq" icon={<BookOpen className="w-4 h-4" />} onClick={() => setMobileMenuOpen(false)}>
+              <MobileNavLink
+                href="/enneagram/faq"
+                icon={<BookOpen className="w-4 h-4" />}
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 Guide
               </MobileNavLink>
               {user && (
-                <MobileNavLink href="/rooms" icon={<MessageCircle className="w-4 h-4" />} onClick={() => setMobileMenuOpen(false)}>
+                <MobileNavLink
+                  href="/rooms"
+                  icon={<MessageCircle className="w-4 h-4" />}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
                   Community
                 </MobileNavLink>
               )}
               <div className="pt-4 border-t border-border">
                 {isLoading || !user ? (
                   <Button asChild className="w-full glass-button">
-                    <Link href="/auth/login" onClick={() => setMobileMenuOpen(false)}>Sign In</Link>
+                    <Link
+                      href="/auth/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Sign In
+                    </Link>
                   </Button>
                 ) : (
                   <div className="w-full">
