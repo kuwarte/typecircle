@@ -67,11 +67,13 @@ export function Footer() {
         </div>
         <div className="border-t border-[var(--color-paper)]/15 pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
           <p className="text-xs text-[var(--color-paper)]/50">
-            © {new Date().getFullYear()} typecircle. A frontend study project.
+            © {new Date().getFullYear()} typecircle.
           </p>
-          <p className="text-xs text-[var(--color-paper)]/50 lowercase">
-            know your type, find your circle
-          </p>
+          <div className="flex items-center gap-4">
+            <a href="/terms" className="text-xs text-[var(--color-paper)]/50 hover:text-[var(--color-paper)]/70 transition-colors">Terms</a>
+            <a href="/privacy" className="text-xs text-[var(--color-paper)]/50 hover:text-[var(--color-paper)]/70 transition-colors">Privacy</a>
+            <p className="text-xs text-[var(--color-paper)]/50 lowercase">know your type, find your circle</p>
+          </div>
         </div>
       </div>
     </footer>
