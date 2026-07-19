@@ -1,8 +1,8 @@
-// src/middleware.ts
+// src/proxy.ts
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PROTECTED_ROUTES = ["/feed", "/onboarding", "/profile"];
+const PROTECTED_ROUTES = ["/feed", "/onboarding", "/profile", "/community"];
 const AUTH_ROUTES = ["/login"];
 
 export async function proxy(request: NextRequest) {
