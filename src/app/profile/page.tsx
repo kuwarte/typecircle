@@ -40,17 +40,36 @@ export default function ProfilePage() {
 
   useEffect(() => {
     async function load() {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) return;
       setUserId(session.user.id);
 
       const { data } = await supabase
         .from("profiles")
-        .select("username, full_name, bio, avatar_url, primary_type, wing, dominant_instinct, instinct_stack")
+        .select(
+          "username, full_name, bio, avatar_url, primary_type, wing, dominant_instinct, instinct_stack",
+        )
         .eq("id", session.user.id)
         .single();
 
-      if (data) setForm((f) => ({ ...f, ...data }));
+      // Supabase returns null for empty text columns; controlled
+      // inputs/textareas need "" instead, or React throws the
+      // "value prop should not be null" warning.
+      if (data) {
+        setForm((f) => ({
+          ...f,
+          username: data.username ?? "",
+          full_name: data.full_name ?? "",
+          bio: data.bio ?? "",
+          avatar_url: data.avatar_url ?? "",
+          primary_type: data.primary_type ?? null,
+          wing: data.wing ?? null,
+          dominant_instinct: data.dominant_instinct ?? "",
+          instinct_stack: data.instinct_stack ?? "",
+        }));
+      }
       setLoading(false);
     }
     load();
@@ -78,7 +97,9 @@ export default function ProfilePage() {
       return;
     }
 
-    const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("avatars").getPublicUrl(path);
     set("avatar_url", publicUrl);
     setUploading(false);
   }
@@ -101,16 +122,22 @@ export default function ProfilePage() {
 
     setSaving(false);
     if (saveError) setError(saveError.message);
-    else { setSaved(true); setTimeout(() => setSaved(false), 2500); }
+    else {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    }
   }
 
   const initials = form.username?.slice(0, 2).toUpperCase() || "?";
 
-  if (loading) return <div className="text-sm text-[var(--color-ink)]/40">Loading…</div>;
+  if (loading)
+    return <div className="text-sm text-[var(--color-ink)]/40">Loading…</div>;
 
   return (
     <div className="max-w-xl">
-      <h1 className="font-heading font-bold text-2xl tracking-tight mb-8">Profile</h1>
+      <h1 className="font-heading font-bold text-2xl tracking-tight mb-8">
+        Profile
+      </h1>
 
       {/* Avatar */}
       <div className="flex items-center gap-5 mb-8">
@@ -128,7 +155,13 @@ export default function ProfilePage() {
           >
             <Camera size={13} strokeWidth={2} />
           </button>
-          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleAvatarChange}
+          />
         </div>
         <div>
           <p className="text-sm font-medium">{form.username || "—"}</p>
@@ -142,7 +175,7 @@ export default function ProfilePage() {
       <div className="flex flex-col gap-5">
         <Field label="Username">
           <input
-            value={form.username}
+            value={form.username ?? ""}
             onChange={(e) => set("username", e.target.value)}
             className={inputCls()}
             placeholder="jasper_kw"
@@ -151,7 +184,7 @@ export default function ProfilePage() {
 
         <Field label="Full name">
           <input
-            value={form.full_name}
+            value={form.full_name ?? ""}
             onChange={(e) => set("full_name", e.target.value)}
             className={inputCls()}
             placeholder="Jasper"
@@ -160,7 +193,7 @@ export default function ProfilePage() {
 
         <Field label="Bio">
           <textarea
-            value={form.bio}
+            value={form.bio ?? ""}
             onChange={(e) => set("bio", e.target.value)}
             rows={3}
             className={cn(inputCls(), "resize-none")}
@@ -169,21 +202,31 @@ export default function ProfilePage() {
         </Field>
       </div>
 
-      {/* Type results — read only */}
-      <div className="mt-8 rounded-2xl bg-[var(--color-ink)] text-[var(--color-paper)] px-6 py-5">
-        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-paper)]/40 mb-4">
+      {/* Type results — read only, same soft surface as the CTA/aside
+          pattern used on the rest of the site instead of a solid ink card */}
+      <div className="mt-8 rounded-2xl bg-[var(--color-ink)]/[0.035] px-6 py-5">
+        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--color-ink)]/40 mb-4">
           Your type results
         </p>
         <div className="grid grid-cols-2 gap-4">
-          <TypeStat label="Primary type" value={form.primary_type ? `Type ${form.primary_type}` : "—"} />
+          <TypeStat
+            label="Primary type"
+            value={form.primary_type ? `Type ${form.primary_type}` : "—"}
+          />
           <TypeStat label="Wing" value={form.wing ? `w${form.wing}` : "—"} />
-          <TypeStat label="Dominant instinct" value={form.dominant_instinct?.toUpperCase() || "—"} />
+          <TypeStat
+            label="Dominant instinct"
+            value={form.dominant_instinct?.toUpperCase() || "—"}
+          />
           <TypeStat label="Instinct stack" value={form.instinct_stack || "—"} />
         </div>
       </div>
       <p className="mt-2 text-xs text-[var(--color-ink)]/35">
         Results come from your quiz.{" "}
-        <a href="/quiz" className="underline hover:text-[var(--color-ink)]/60 transition-colors">
+        <a
+          href="/quiz"
+          className="underline hover:text-[var(--color-ink)]/60 transition-colors"
+        >
           Retake the quiz
         </a>{" "}
         to update them.
@@ -205,18 +248,30 @@ export default function ProfilePage() {
 function TypeStat({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-xs text-[var(--color-paper)]/40 mb-1">{label}</p>
+      <p className="text-xs text-[var(--color-ink)]/40 mb-1">{label}</p>
       <p className="font-heading font-semibold text-lg">{value}</p>
     </div>
   );
 }
 
-function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
+function Field({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex flex-col gap-1.5">
       <label className="text-sm font-medium text-[var(--color-ink)]/70">
         {label}
-        {hint && <span className="ml-2 text-xs text-[var(--color-ink)]/35 font-normal">{hint}</span>}
+        {hint && (
+          <span className="ml-2 text-xs text-[var(--color-ink)]/35 font-normal">
+            {hint}
+          </span>
+        )}
       </label>
       {children}
     </div>
@@ -224,5 +279,5 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
 }
 
 function inputCls() {
-  return "w-full rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] transition-colors";
+  return "w-full rounded-xl border border-[var(--color-ink)]/10 bg-[var(--color-paper)] px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] transition-colors";
 }

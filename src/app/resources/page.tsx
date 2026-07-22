@@ -1,75 +1,165 @@
 import Link from "next/link";
-import { BookOpen, ExternalLink } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+
+const FEATURED = {
+  title: "How to use your type without becoming trapped by it",
+  description:
+    "A practical reading path for treating the Enneagram as a mirror, not a label.",
+  href: "#",
+};
 
 const RESOURCES = [
   {
-    category: "Getting started",
+    category: "Start here",
     items: [
-      { title: "What is the Enneagram?", description: "A primer on the system, its origins, and how it differs from other personality frameworks.", href: "#" },
-      { title: "How to find your type", description: "Why self-typing is hard, and how to use the test as a starting point rather than a verdict.", href: "#" },
+      {
+        title: "What is the Enneagram?",
+        description:
+          "A grounded primer on the system, its origins, and how it differs from other personality frameworks.",
+        href: "#",
+      },
+      {
+        title: "How to find your type",
+        description:
+          "Why self-typing is hard, and how to use the test as a starting point rather than a verdict.",
+        href: "#",
+      },
     ],
   },
   {
     category: "By type",
     items: [
-      { title: "Type 1 — The Reformer", description: "Integrity, inner critic, and the path from resentment to acceptance.", href: "/types/1" },
-      { title: "Type 2 — The Helper", description: "Giving, boundaries, and learning to receive.", href: "/types/2" },
-      { title: "Type 3 — The Achiever", description: "Image, worth, and the difference between doing and being.", href: "/types/3" },
-      { title: "Type 4 — The Individualist", description: "Identity, longing, and finding meaning in the ordinary.", href: "/types/4" },
-      { title: "Type 5 — The Investigator", description: "Knowledge, withdrawal, and learning to trust engagement.", href: "/types/5" },
-      { title: "Type 6 — The Loyalist", description: "Security, doubt, and building trust from the inside out.", href: "/types/6" },
-      { title: "Type 7 — The Enthusiast", description: "Possibility, avoidance, and sitting with what's hard.", href: "/types/7" },
-      { title: "Type 8 — The Challenger", description: "Power, vulnerability, and the courage to be soft.", href: "/types/8" },
-      { title: "Type 9 — The Peacemaker", description: "Harmony, self-forgetting, and waking up to your own wants.", href: "/types/9" },
-    ],
+      [
+        "Type 1 - The Reformer",
+        "Integrity, inner critic, and acceptance.",
+        "/types/1",
+      ],
+      ["Type 2 - The Helper", "Giving, boundaries, and receiving.", "/types/2"],
+      ["Type 3 - The Achiever", "Image, worth, and being.", "/types/3"],
+      [
+        "Type 4 - The Individualist",
+        "Identity, longing, and ordinary meaning.",
+        "/types/4",
+      ],
+      [
+        "Type 5 - The Investigator",
+        "Knowledge, withdrawal, and engagement.",
+        "/types/5",
+      ],
+      ["Type 6 - The Loyalist", "Security, doubt, and trust.", "/types/6"],
+      [
+        "Type 7 - The Enthusiast",
+        "Possibility, avoidance, and presence.",
+        "/types/7",
+      ],
+      [
+        "Type 8 - The Challenger",
+        "Power, vulnerability, and softness.",
+        "/types/8",
+      ],
+      [
+        "Type 9 - The Peacemaker",
+        "Harmony, self-forgetting, and wanting.",
+        "/types/9",
+      ],
+    ].map(([title, description, href]) => ({ title, description, href })),
   },
   {
-    category: "Going deeper",
+    category: "Go deeper",
     items: [
-      { title: "Wings explained", description: "How the adjacent types shape your core type's expression.", href: "#" },
-      { title: "Instinct stacks (sp/so/sx)", description: "The three instinctual drives and how they layer onto your type.", href: "#" },
-      { title: "Stress and growth arrows", description: "Where each type goes under pressure — and what integration looks like.", href: "#" },
+      {
+        title: "Wings explained",
+        description: "How adjacent types shape your core type's expression.",
+        href: "#",
+      },
+      {
+        title: "Instinct stacks",
+        description:
+          "The three instinctual drives and how they layer onto your type.",
+        href: "#",
+      },
+      {
+        title: "Stress and growth arrows",
+        description:
+          "Where each type goes under pressure, and what integration looks like.",
+        href: "#",
+      },
     ],
   },
 ];
 
 export default function ResourcesPage() {
   return (
-    <section className="max-w-6xl mx-auto px-6 py-12">
-      <div className="mb-10">
-        <h1 className="font-heading font-bold text-4xl tracking-tight">Resources</h1>
-        <p className="mt-2 text-[var(--color-ink)]/55 text-sm max-w-md">
-          Guides, explainers, and deep dives to help you understand the Enneagram beyond the test result.
+    <main className="max-w-6xl mx-auto px-6 pt-10 pb-16 md:pb-24">
+      {/* Header — plain, no card, no oversized decorative icon */}
+      <section className="max-w-6xl">
+        <h1 className="font-heading font-semibold text-3xl md:text-5xl leading-[1.05] tracking-tight">
+          A field guide for noticing yourself.
+        </h1>
+        <p className="mt-5 text-[var(--color-ink)]/62 text-base md:text-lg max-w-xl">
+          Read in small pieces. Bring one idea into a conversation. Let the
+          pattern become useful before it becomes a label.
         </p>
-      </div>
+      </section>
 
-      <div className="flex flex-col gap-12">
+      {/* Featured path — one understated bordered link, not a colored block */}
+      <Link
+        href={FEATURED.href}
+        className="group mt-8 md:mt-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border border-[var(--color-ink)]/10 px-6 py-6 md:px-7 md:py-7 hover:border-[var(--color-accent)]/40 transition-colors"
+      >
+        <div className="min-w-0">
+          <h2 className="mt-2 font-heading font-semibold text-xl md:text-2xl tracking-tight">
+            {FEATURED.title}
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink)]/55 max-w-xl">
+            {FEATURED.description}
+          </p>
+        </div>
+        <span className="shrink-0 w-10 h-10 rounded-full border border-[var(--color-ink)]/15 text-[var(--color-ink)]/50 flex items-center justify-center group-hover:border-[var(--color-accent)]/40 group-hover:text-[var(--color-accent)] transition-colors">
+          <ArrowUpRight size={17} strokeWidth={2.25} />
+        </span>
+      </Link>
+
+      {/* Resource sections — single-column list per category, divided by
+          thin rules. The old 2-col grid let rows of uneven length
+          misalign against their neighbor and read as a jumbled wall of
+          links; one column top-to-bottom is much easier to scan. */}
+      <section className="mt-12 md:mt-16 divide-y divide-[var(--color-ink)]/10 border-y border-[var(--color-ink)]/10">
         {RESOURCES.map((section) => (
-          <div key={section.category}>
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-[var(--color-ink)]/40 mb-4">
+          <div
+            key={section.category}
+            className="grid grid-cols-1 md:grid-cols-[200px_minmax(0,1fr)] gap-5 py-8"
+          >
+            <h2 className="font-heading font-semibold text-xl tracking-tight">
               {section.category}
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+
+            <div className="divide-y divide-[var(--color-ink)]/8">
               {section.items.map((item) => (
                 <Link
                   key={item.title}
                   href={item.href}
-                  className="group flex flex-col gap-2 rounded-2xl border border-black/5 p-5 hover:shadow-[4px_4px_0_0_rgba(0,0,0,0.08)] transition-shadow"
+                  className="group flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0 transition-colors"
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <BookOpen size={15} strokeWidth={2} className="text-[var(--color-accent)] mt-0.5 shrink-0" />
-                    <ExternalLink size={13} strokeWidth={2} className="text-[var(--color-ink)]/20 group-hover:text-[var(--color-ink)]/40 transition-colors shrink-0" />
+                  <div className="min-w-0">
+                    <h3 className="font-heading font-semibold text-lg tracking-tight group-hover:text-[var(--color-accent)] transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="mt-1 text-sm leading-relaxed text-[var(--color-ink)]/55">
+                      {item.description}
+                    </p>
                   </div>
-                  <h3 className="font-heading font-semibold text-sm tracking-tight group-hover:text-[var(--color-accent)] transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-[var(--color-ink)]/50 leading-relaxed">{item.description}</p>
+                  <ArrowUpRight
+                    size={16}
+                    strokeWidth={2.25}
+                    className="mt-1 shrink-0 text-[var(--color-ink)]/30 group-hover:text-[var(--color-accent)] transition-colors"
+                  />
                 </Link>
               ))}
             </div>
           </div>
         ))}
-      </div>
-    </section>
+      </section>
+    </main>
   );
 }

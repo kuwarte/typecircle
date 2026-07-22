@@ -7,7 +7,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function generateStaticParams() {
-  return TYPES.map((t) => ({ n: String(t.n) }));
+  return TYPES.map((type) => ({ n: String(type.n) }));
 }
 
 export async function generateMetadata({
@@ -19,7 +19,7 @@ export async function generateMetadata({
   const type = getType(Number(n));
   if (!type) return {};
   return {
-    title: `${type.name} — Type ${type.n} | typecircle`,
+    title: `${type.name} - Type ${type.n} | typecircle`,
     description: type.blurb,
   };
 }
@@ -40,78 +40,102 @@ export default async function TypePage({
   const nextType = getType(nextN);
 
   return (
-    <section className="max-w-3xl mx-auto px-6 py-16 md:py-24">
+    <main className="max-w-6xl mx-auto px-6 pt-10 pb-16 md:pb-24">
       <Link
         href="/types"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ink)]/60 hover:text-[var(--color-accent)] transition-colors mb-8"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-ink)]/55 hover:text-[var(--color-accent)] transition-colors mb-6"
       >
-        <ArrowLeft size={16} strokeWidth={2} />
-        all types
+        <ArrowLeft size={16} strokeWidth={2.25} />
+        All types
       </Link>
 
-      <span className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-ink)]/50 mb-3">
-        <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)]" />
-        type {type.n} — {type.theme}
-      </span>
+      {/* Header — the number now bleeds off the bottom-right corner on
+          purpose (with a top fade) instead of getting hard-clipped */}
+      <section className="relative overflow-hidden pt-4 pb-10 md:pb-14 border-b border-[var(--color-ink)]/8">
+        <span
+          aria-hidden="true"
+          className="absolute -right-2 -bottom-10 font-heading font-bold text-[200px] md:text-[240px] leading-none text-[var(--color-ink)]/[0.05] select-none pointer-events-none"
+          style={{
+            WebkitMaskImage:
+              "linear-gradient(to top, black 55%, transparent 100%)",
+            maskImage: "linear-gradient(to top, black 55%, transparent 100%)",
+          }}
+        >
+          {type.n}
+        </span>
+        <div className="relative max-w-2xl">
+          <h1 className="font-heading font-semibold text-4xl md:text-6xl leading-[1.05] tracking-tight">
+            {type.name}
+          </h1>
+          <p className="mt-5 text-[var(--color-ink)]/62 text-base md:text-xl max-w-xl leading-relaxed">
+            {type.blurb}
+          </p>
+        </div>
+      </section>
 
-      <h1 className="font-heading font-semibold text-4xl md:text-6xl tracking-tight leading-[1.05]">
-        {type.name}
-      </h1>
-
-      <p className="mt-5 text-[var(--color-ink)]/70 text-lg md:text-xl max-w-xl leading-relaxed">
-        {type.blurb}
-      </p>
-
-      <div className="mt-10 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl bg-[var(--color-ink)] text-[var(--color-paper)] p-6 md:p-7">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-3">
-            core motivation
-          </h3>
-          <p className="text-[var(--color-paper)]/80 leading-relaxed">
+      {/* Core motivation + Wings — both are one short fact, so they get
+          equal treatment: stacked, same scale, split by a thin rule */}
+      <section className="max-w-2xl pt-10 md:pt-14 space-y-8">
+        <div>
+          <h2 className="font-heading font-semibold text-lg tracking-tight mb-2">
+            Core motivation
+          </h2>
+          <p className="text-base md:text-lg leading-relaxed text-[var(--color-ink)]/75">
             {type.core}
           </p>
         </div>
-        <div className="rounded-2xl bg-[var(--color-accent)] text-[var(--color-paper)] p-6 md:p-7">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--color-paper)]/70 mb-3">
-            wings
-          </h3>
-          <p className="text-[var(--color-paper)]/90 leading-relaxed">
+
+        <div className="pt-8 border-t border-[var(--color-ink)]/8">
+          <h2 className="font-heading font-semibold text-lg tracking-tight mb-2">
+            Wings
+          </h2>
+          <p className="text-base md:text-lg leading-relaxed text-[var(--color-ink)]/75">
             {type.wing}
           </p>
         </div>
-      </div>
+      </section>
 
-      <div className="mt-10 rounded-2xl border border-[var(--color-ink)]/10 p-6 md:p-7 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <p className="text-[var(--color-ink)]/70 text-sm md:text-base">
-          Not sure if {type.name.toLowerCase()} is really you?
-        </p>
+      {/* CTA — its own soft surface so it reads as the one actionable
+          moment on the page, without shouting in accent color */}
+      <section className="mt-14 md:mt-16 rounded-2xl bg-[var(--color-ink)]/[0.035] px-7 py-8 md:px-9 md:py-9 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+        <div>
+          <h2 className="font-heading font-semibold text-xl md:text-2xl tracking-tight">
+            Still checking if this is you?
+          </h2>
+          <p className="mt-1.5 text-sm text-[var(--color-ink)]/55">
+            Use the test as a starting point, then compare the pattern against
+            your real life.
+          </p>
+        </div>
         <Link
           href="/quiz"
           className={cn(
             buttonVariants({ size: "lg" }),
-            "rounded-full bg-[var(--color-accent)] text-[var(--color-paper)] hover:bg-[var(--color-accent)]/90 font-medium px-6 whitespace-nowrap w-fit",
+            "rounded-full bg-[var(--color-accent)] text-[var(--color-paper)] hover:bg-[var(--color-accent)]/90 font-medium px-6 whitespace-nowrap w-fit shrink-0",
           )}
         >
           Take the test
         </Link>
-      </div>
+      </section>
 
+      {/* Prev / next — one pagination bar split by a divider,
+          instead of two separate boxes competing for attention */}
       {prevType && nextType && (
-        <div className="mt-12 pt-8 border-t border-[var(--color-ink)]/10 flex items-center justify-between gap-4">
+        <nav className="mt-6 rounded-2xl border border-[var(--color-ink)]/10 overflow-hidden grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-[var(--color-ink)]/10">
           <Link
             href={`/types/${prevType.n}`}
-            className="group flex items-center gap-3 text-left min-w-0"
+            className="group flex items-center gap-3 px-5 py-5 hover:bg-[var(--color-ink)]/[0.03] transition-colors"
           >
             <ArrowLeft
-              size={18}
-              strokeWidth={2}
-              className="shrink-0 text-[var(--color-ink)]/40 group-hover:text-[var(--color-accent)] transition-colors"
+              size={16}
+              strokeWidth={2.25}
+              className="shrink-0 text-[var(--color-ink)]/35 group-hover:text-[var(--color-accent)] transition-colors"
             />
             <div className="min-w-0">
-              <span className="block text-xs text-[var(--color-ink)]/45">
-                type {prevType.n}
+              <span className="block text-[10px] font-semibold uppercase tracking-wider text-[var(--color-ink)]/40">
+                Previous
               </span>
-              <span className="block text-sm font-medium text-[var(--color-ink)]/80 group-hover:text-[var(--color-accent)] transition-colors truncate">
+              <span className="block text-sm font-semibold truncate mt-0.5">
                 {prevType.name}
               </span>
             </div>
@@ -119,24 +143,24 @@ export default async function TypePage({
 
           <Link
             href={`/types/${nextType.n}`}
-            className="group flex items-center gap-3 text-right min-w-0 justify-end"
+            className="group flex items-center justify-between sm:justify-end gap-3 px-5 py-5 hover:bg-[var(--color-ink)]/[0.03] transition-colors"
           >
-            <div className="min-w-0">
-              <span className="block text-xs text-[var(--color-ink)]/45">
-                type {nextType.n}
+            <div className="min-w-0 sm:text-right order-1">
+              <span className="block text-[10px] font-semibold uppercase tracking-wider text-[var(--color-ink)]/40">
+                Next
               </span>
-              <span className="block text-sm font-medium text-[var(--color-ink)]/80 group-hover:text-[var(--color-accent)] transition-colors truncate">
+              <span className="block text-sm font-semibold truncate mt-0.5">
                 {nextType.name}
               </span>
             </div>
             <ArrowRight
-              size={18}
-              strokeWidth={2}
-              className="shrink-0 text-[var(--color-ink)]/40 group-hover:text-[var(--color-accent)] transition-colors"
+              size={16}
+              strokeWidth={2.25}
+              className="shrink-0 order-2 text-[var(--color-ink)]/35 group-hover:text-[var(--color-accent)] transition-colors"
             />
           </Link>
-        </div>
+        </nav>
       )}
-    </section>
+    </main>
   );
 }
