@@ -6,12 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetTitle,
-} from "@/components/ui/sheet";
+// mobile nav uses inline icons; no sheet required
 import { cn } from "@/lib/utils";
 import { createClient } from "@/services/supabase/client";
 import { signOut } from "@/services/supabase/auth";
@@ -30,8 +25,8 @@ import {
 } from "lucide-react";
 
 const baseLinks = [
-  { href: "/types", label: "types", icon: Compass },
   { href: "/community", label: "community", icon: Users },
+  { href: "/types", label: "types", icon: Compass },
   { href: "/resources", label: "resources", icon: BookOpen },
 ];
 
@@ -233,133 +228,116 @@ export function Nav() {
           )}
         </div>
 
-        {/* Mobile trigger */}
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger
-            aria-label="Open menu"
-            className="md:hidden flex items-center justify-center w-9 h-9 rounded-full hover:bg-black/5 transition-colors"
-          >
-            <Menu size={20} strokeWidth={2} />
-          </SheetTrigger>
-
-          <SheetContent
-            side="top"
-            className="w-full bg-[var(--color-paper)] border-b border-black/5 p-0 flex flex-col rounded-b-3xl"
-          >
-            <SheetTitle className="sr-only">Navigation menu</SheetTitle>
-
-            {/* Sheet header */}
-            <div className="flex items-center justify-between px-5 h-16 border-b border-black/5 shrink-0">
-              <Link
-                href={username ? "/feed" : "/"}
-                onClick={close}
-                className="font-heading font-bold text-lg tracking-tight lowercase"
-              >
-                typecircle
-              </Link>
-            </div>
-
-            {/* Nav links */}
-            <nav className="flex flex-col px-3 py-2">
-              {links.map((link) => {
-                const Icon = link.icon;
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={close}
-                    className={cn(
-                      "flex items-center gap-3 text-sm font-medium lowercase py-3 px-3 rounded-xl transition-colors",
-                      isActive
-                        ? "text-[var(--color-accent)] bg-[var(--color-accent)]/8"
-                        : "text-[var(--color-ink)]/75 hover:text-[var(--color-ink)] hover:bg-black/5",
-                    )}
-                  >
-                    <Icon
-                      size={18}
-                      strokeWidth={2}
+        {/* Mobile nav: show 4 icons inline; only profile/avatar toggles popup */}
+        <div className="md:hidden flex items-center gap-3">
+          {links && (
+            <>
+              {/* choose mobile icons: feed (if present) or types, then community, then resources */}
+              {(() => {
+                const typesLink = baseLinks[0];
+                const communityLink = baseLinks[1];
+                const resourcesLink = baseLinks[2];
+                // mobile icons: feed, types, community, resources
+                const mobileIcons = [
+                  feedLink,
+                  typesLink,
+                  communityLink,
+                  resourcesLink,
+                ];
+                return mobileIcons.map((link) => {
+                  const Icon = link.icon;
+                  const isActive = pathname === link.href;
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
                       className={cn(
-                        "shrink-0",
-                        isActive
-                          ? "text-[var(--color-accent)]"
-                          : "text-[var(--color-ink)]/40",
+                        "flex items-center justify-center w-9 h-9 rounded-full hover:bg-black/5 transition-colors",
+                        isActive ? "bg-[var(--color-accent)]/12" : "",
                       )}
-                    />
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </nav>
+                    >
+                      <Icon
+                        size={18}
+                        strokeWidth={2}
+                        className={
+                          isActive
+                            ? "text-[var(--color-accent)]"
+                            : "text-[var(--color-ink)]/60"
+                        }
+                      />
+                    </Link>
+                  );
+                });
+              })()}
 
-            {/* User section + CTA */}
-            <div className="px-4 pb-5 pt-2 border-t border-black/5 shrink-0">
-              {loading ? (
-                <div className="flex items-center gap-3 py-3">
-                  <div className="w-9 h-9 rounded-full bg-black/8 animate-pulse shrink-0" />
-                  <div className="w-28 h-4 rounded bg-black/8 animate-pulse" />
-                </div>
-              ) : username ? (
-                <div className="flex items-center justify-between py-3">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="w-9 h-9 shrink-0">
-                      <AvatarImage src={avatarUrl ?? ""} alt={username} />
-                      <AvatarFallback className="bg-[var(--color-accent)] text-[var(--color-paper)] text-sm font-semibold">
-                        {initials}
-                      </AvatarFallback>
-                    </Avatar>
-                    <p className="text-sm font-semibold truncate">{username}</p>
-                  </div>
-                  <div className="flex items-center gap-1">
+              {/* profile avatar toggles popup on mobile */}
+              <div className="relative" ref={menuRef}>
+                <button
+                  onClick={() => setMenuOpen((v) => !v)}
+                  className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-black/5 transition-colors"
+                >
+                  <Avatar className="w-8 h-8">
+                    <AvatarImage
+                      src={avatarUrl ?? ""}
+                      alt={username ?? "profile"}
+                    />
+                    <AvatarFallback className="bg-[var(--color-accent)] text-[var(--color-paper)] text-xs font-semibold">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                </button>
+
+                {menuOpen && (
+                  <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-black/5 bg-[var(--color-paper)] shadow-xl py-2 overflow-hidden origin-top-right animate-in fade-in zoom-in-95 duration-150">
+                    <div className="flex items-center gap-3 px-4 py-3">
+                      <Avatar className="w-9 h-9">
+                        <AvatarImage
+                          src={avatarUrl ?? ""}
+                          alt={username ?? ""}
+                        />
+                        <AvatarFallback className="bg-[var(--color-accent)] text-[var(--color-paper)] text-xs font-semibold">
+                          {initials}
+                        </AvatarFallback>
+                      </Avatar>
+                      <p className="text-sm font-semibold truncate">
+                        {username}
+                      </p>
+                    </div>
+
+                    <div className="h-px bg-black/5 mx-2 my-1" />
+
                     <Link
                       href="/profile"
-                      onClick={close}
-                      className="flex items-center justify-center w-9 h-9 rounded-xl hover:bg-black/5 transition-colors text-[var(--color-ink)]/50"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-3 mx-2 px-2.5 py-2.5 rounded-lg text-sm text-[var(--color-ink)]/80 hover:bg-black/5 transition-colors"
                     >
-                      <UserIcon size={17} strokeWidth={2} />
+                      <UserIcon size={16} strokeWidth={2} /> Profile
                     </Link>
                     <Link
                       href="/settings"
-                      onClick={close}
-                      className="flex items-center justify-center w-9 h-9 rounded-xl hover:bg-black/5 transition-colors text-[var(--color-ink)]/50"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-3 mx-2 px-2.5 py-2.5 rounded-lg text-sm text-[var(--color-ink)]/80 hover:bg-black/5 transition-colors"
                     >
-                      <Settings size={17} strokeWidth={2} />
+                      <Settings size={17} strokeWidth={2} /> Settings
                     </Link>
+
+                    <div className="h-px bg-black/5 mx-2 my-1" />
+
                     <button
                       onClick={() => {
-                        close();
+                        setMenuOpen(false);
                         signOut();
                       }}
-                      className="flex items-center justify-center w-9 h-9 rounded-xl hover:bg-red-50 transition-colors text-red-600"
+                      className="w-full flex items-center gap-3 mx-2 px-2.5 py-2.5 rounded-lg text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
                     >
-                      <LogOut size={17} strokeWidth={2} />
+                      <LogOut size={16} strokeWidth={2} /> Log out
                     </button>
                   </div>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 pt-3">
-                  <Link
-                    href="/quiz"
-                    onClick={close}
-                    className={cn(
-                      buttonVariants(),
-                      "rounded-full bg-[var(--color-accent)] text-[var(--color-paper)] hover:bg-[var(--color-accent)]/90 font-medium lowercase flex items-center justify-center gap-1.5 flex-1",
-                    )}
-                  >
-                    find your type <ArrowRight size={15} strokeWidth={2} />
-                  </Link>
-                  <Link
-                    href="/login"
-                    onClick={close}
-                    className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-full"
-                  >
-                    <LogIn size={15} strokeWidth={2} /> Log in
-                  </Link>
-                </div>
-              )}
-            </div>
-          </SheetContent>
-        </Sheet>
+                )}
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );

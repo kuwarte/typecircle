@@ -1,16 +1,35 @@
 // src/components/community.tsx
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { createClient } from "@/services/supabase/server";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const MEMBERS = [
-  { initials: "MJ" },
-  { initials: "AR" },
-  { initials: "SK" },
-  { initials: "TP" },
-  { initials: "LN" },
-];
+async function fetchRecentMembers() {
+  const supabase = await createClient();
+  const thirtyDaysAgo = new Date(
+    Date.now() - 30 * 24 * 60 * 60 * 1000,
+  ).toISOString();
+
+  const [{ data: recent }, { data: countRes, count }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("id, username, avatar_url, created_at")
+      .gte("created_at", thirtyDaysAgo)
+      .order("created_at", { ascending: false })
+      .limit(5),
+    // count of profiles joined in last 30 days
+    supabase
+      .from("profiles")
+      .select("id", { count: "exact", head: false })
+      .gte("created_at", thirtyDaysAgo),
+  ]);
+
+  return {
+    recent: recent ?? [],
+    count: (count as number) ?? countRes?.length ?? 0,
+  };
+}
 
 const COMMUNITY_ASCII = `
                                                                                                     
@@ -62,7 +81,23 @@ const COMMUNITY_ASCII = `
                                               .:.                                                   
 `;
 
-export function Community() {
+let _recentCache: { ts: number; recent: any[]; count: number } | null = null;
+
+export async function Community() {
+  const now = Date.now();
+  let recent: any[] = [];
+  let count = 0;
+
+  if (_recentCache && now - _recentCache.ts < 1000 * 60 * 5) {
+    recent = _recentCache.recent;
+    count = _recentCache.count;
+  } else {
+    const res = await fetchRecentMembers();
+    recent = res.recent;
+    count = res.count;
+    _recentCache = { ts: now, recent, count };
+  }
+
   return (
     <section className="relative max-w-6xl mx-auto px-6 py-16 md:py-24 overflow-hidden">
       <pre
@@ -95,22 +130,25 @@ export function Community() {
 
           <div className="flex items-center gap-3">
             <div className="flex -space-x-2.5">
-              {MEMBERS.map((m, idx) => (
+              {recent.map((m: any, idx: number) => (
                 <Avatar
-                  key={m.initials}
+                  key={m.id}
                   className="w-10 h-10 border-[2px] border-[var(--color-paper)] shadow-sm ring-1 ring-[var(--color-ink)]/5"
-                  style={{ zIndex: MEMBERS.length - idx }}
+                  style={{ zIndex: recent.length - idx }}
                 >
-                  <AvatarImage src="" alt="" />
+                  <AvatarImage
+                    src={m.avatar_url ?? ""}
+                    alt={m.username ?? ""}
+                  />
                   <AvatarFallback className="bg-zinc-400 text-[var(--color-paper)] text-xs font-semibold">
-                    {m.initials}
+                    {(m.username ?? "?").slice(0, 2).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
               ))}
             </div>
             <span className="text-sm text-[var(--color-ink)]/50">
               <span className="text-[var(--color-ink)] font-semibold">
-                2.4k+
+                {count >= 1000 ? `${(count / 1000).toFixed(1)}k+` : count}
               </span>{" "}
               joined this month
             </span>

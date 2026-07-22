@@ -14,8 +14,8 @@ const PILLARS = [
   {
     label: "Our approach",
     icon: Users2,
-    bg: "bg-[var(--color-ink)]",
-    bgVar: "var(--color-ink)",
+    bg: "bg-[var(--color-accent)]",
+    bgVar: "var(--color-accent)",
     fg: "text-[var(--color-paper)]",
     title: "Type is a starting point, not a label",
     body: "We treat your result as a lens to understand patterns, growth edges, and relationships — not a box to sit in.",
@@ -23,9 +23,9 @@ const PILLARS = [
   {
     label: "Our community",
     icon: Sparkles,
-    bg: "bg-[var(--color-paper)]",
-    bgVar: "var(--color-paper)",
-    fg: "text-[var(--color-ink)]",
+    bg: "bg-[var(--color-accent)]",
+    bgVar: "var(--color-accent)",
+    fg: "text-[var(--color-paper)]",
     title: "Better understood, together",
     body: "Circles connect you with people who share your type, or challenge it — either way, you see yourself more clearly.",
   },

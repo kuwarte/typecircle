@@ -16,7 +16,7 @@ export function TypesGrid() {
           <Link
             key={t.n}
             href={`/types/${t.n}`}
-            className="group relative overflow-hidden rounded-2xl bg-[var(--color-accent)] text-[var(--color-paper)] px-7 py-8 min-h-[280px] flex flex-col transition-shadow duration-200 hover:shadow-[8px_8px_0_0_rgba(0,0,0,0.15)]"
+            className="group relative overflow-hidden rounded-2xl bg-[var(--color-accent)] text-[var(--color-paper)] px-7 py-8 min-h-[280px] flex flex-col transition-shadow duration-200 hover:shadow-[8px_8px_0_0_rgba(0,0,0,0.40)]"
           >
             <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-paper)]/70 mb-4">
               type {t.n} — {t.theme}
