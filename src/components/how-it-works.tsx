@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 
 const STEPS = [
   {
@@ -145,22 +146,18 @@ export function HowItWorks() {
             >
               {/* Image */}
               <div className="p-2 md:p-3 min-h-[320px] md:min-h-0">
-                <div className="relative w-full h-full min-h-[320px] rounded-2xl overflow-hidden bg-[var(--color-paper)]/5 flex items-center justify-center">
-                  {/*
-                    Swap this placeholder for your actual screenshot:
-                    <img
-                      src={step.image}
-                      alt={step.title}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  */}
-                  <span className="text-[var(--color-paper)]/25 text-sm">
-                    {step.image}
-                  </span>
+                <div className="relative w-full h-full min-h-[320px] rounded-2xl overflow-hidden bg-[var(--color-paper)]/5">
+                  <Image
+                    src={step.image}
+                    alt={step.title}
+                    fill
+                    className="object-contain scale-100"
+                    sizes="(max-width: 768px) 100vw, 60vw"
+                    priority={i === 0}
+                  />
 
-                  {/* Step number badge — same color as card, sits on the
-                      image's top-left corner */}
-                  <span className="absolute top-4 left-4 font-heading font-bold text-sm text-[var(--color-accent)] bg-[var(--color-ink)] rounded-full px-3.5 py-1.5 shadow-md">
+                  {/* Step badge */}
+                  <span className="absolute top-4 left-4 font-heading font-bold text-sm text-[var(--color-accent)] bg-[var(--color-ink)] rounded-full px-3.5 py-1.5 shadow-md z-10">
                     {step.n}
                   </span>
                 </div>

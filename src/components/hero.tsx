@@ -98,14 +98,14 @@ export function Hero() {
             <div className="flex items-center gap-5 text-sm text-[var(--color-paper)]/60">
               <div>
                 <span className="text-[var(--color-paper)] font-heading font-semibold">
-                  12,400+
+                  ?
                 </span>{" "}
                 types found
               </div>
               <div className="w-px h-8 bg-[var(--color-paper)]/20" />
               <div>
                 <span className="text-[var(--color-paper)] font-heading font-semibold">
-                  4.8
+                  ?
                 </span>{" "}
                 avg. insight rating
               </div>

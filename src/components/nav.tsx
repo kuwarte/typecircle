@@ -22,11 +22,12 @@ import {
   User as UserIcon,
   Settings,
   ChevronDown,
+  Sparkles,
 } from "lucide-react";
 
 const baseLinks = [
-  { href: "/community", label: "community", icon: Users },
   { href: "/types", label: "types", icon: Compass },
+  { href: "/community", label: "community", icon: Users },
   { href: "/resources", label: "resources", icon: BookOpen },
 ];
 
@@ -40,7 +41,8 @@ export function Nav() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const close = () => setOpen(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const desktopMenuRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const supabase = createClient();
@@ -77,8 +79,10 @@ export function Nav() {
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node))
-        setMenuOpen(false);
+      const target = e.target as Node;
+      const insideDesktop = desktopMenuRef.current?.contains(target);
+      const insideMobile = mobileMenuRef.current?.contains(target);
+      if (!insideDesktop && !insideMobile) setMenuOpen(false);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -134,79 +138,91 @@ export function Nav() {
           {loading ? (
             <div className="w-24 h-8 rounded-full bg-black/8 animate-pulse" />
           ) : username ? (
-            <div className="relative" ref={menuRef}>
-              <button
-                onClick={() => setMenuOpen((v) => !v)}
+            <>
+              <Link
+                href="/quiz"
                 className={cn(
-                  "flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-full border border-transparent transition-colors",
-                  menuOpen
-                    ? "bg-[var(--color-accent)]/12"
-                    : "border-black/10 hover:bg-black/[0.03]",
+                  buttonVariants(),
+                  "rounded-full bg-[var(--color-accent)] text-[var(--color-paper)] hover:bg-[var(--color-accent)]/90 font-medium lowercase flex items-center gap-1.5",
                 )}
               >
-                <Avatar className="w-7 h-7">
-                  <AvatarImage src={avatarUrl ?? ""} alt={username} />
-                  <AvatarFallback className="bg-[var(--color-accent)] text-[var(--color-paper)] text-xs font-semibold">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium text-[var(--color-ink)]/70 max-w-[120px] truncate">
-                  {username}
-                </span>
-                <ChevronDown
-                  size={14}
-                  strokeWidth={2.5}
+                discover your type <ArrowRight size={16} strokeWidth={2} />
+              </Link>
+
+              <div className="relative" ref={desktopMenuRef}>
+                <button
+                  onClick={() => setMenuOpen((v) => !v)}
+                  aria-label="Account menu"
                   className={cn(
-                    "text-[var(--color-ink)]/40 transition-transform duration-200",
-                    menuOpen && "rotate-180",
+                    "flex items-center gap-1 pl-1 pr-1.5 py-1 rounded-full border border-transparent transition-colors",
+                    menuOpen
+                      ? "bg-[var(--color-accent)]/12"
+                      : "border-black/10 hover:bg-black/[0.03]",
                   )}
-                />
-              </button>
+                >
+                  <Avatar className="w-7 h-7">
+                    <AvatarImage src={avatarUrl ?? ""} alt={username} />
+                    <AvatarFallback className="bg-[var(--color-accent)] text-[var(--color-paper)] text-xs font-semibold">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <ChevronDown
+                    size={14}
+                    strokeWidth={2.5}
+                    className={cn(
+                      "text-[var(--color-ink)]/40 transition-transform duration-200",
+                      menuOpen && "rotate-180",
+                    )}
+                  />
+                </button>
 
-              {menuOpen && (
-                <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-black/5 bg-[var(--color-paper)] shadow-xl py-2 overflow-hidden origin-top-right animate-in fade-in zoom-in-95 duration-150">
-                  <div className="flex items-center gap-3 px-4 py-3">
-                    <Avatar className="w-9 h-9">
-                      <AvatarImage src={avatarUrl ?? ""} alt={username} />
-                      <AvatarFallback className="bg-[var(--color-accent)] text-[var(--color-paper)] text-xs font-semibold">
-                        {initials}
-                      </AvatarFallback>
-                    </Avatar>
-                    <p className="text-sm font-semibold truncate">{username}</p>
+                {menuOpen && (
+                  <div className="absolute right-0 mt-2 w-56 rounded-2xl border border-black/5 bg-[var(--color-paper)] shadow-xl py-2 overflow-hidden origin-top-right animate-in fade-in zoom-in-95 duration-150">
+                    <div className="flex items-center gap-3 px-4 py-3">
+                      <Avatar className="w-9 h-9">
+                        <AvatarImage src={avatarUrl ?? ""} alt={username} />
+                        <AvatarFallback className="bg-[var(--color-accent)] text-[var(--color-paper)] text-xs font-semibold">
+                          {initials}
+                        </AvatarFallback>
+                      </Avatar>
+                      <p className="text-sm font-semibold truncate">
+                        {username}
+                      </p>
+                    </div>
+
+                    <div className="h-px bg-black/5 mx-2 my-1" />
+
+                    <Link
+                      href="/profile"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-3 mx-2 px-2.5 py-2.5 rounded-lg text-sm text-[var(--color-ink)]/80 hover:bg-black/5 transition-colors"
+                    >
+                      <UserIcon size={16} strokeWidth={2} /> Profile
+                    </Link>
+                    <Link
+                      href="/settings"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-3 mx-2 px-2.5 py-2.5 rounded-lg text-sm text-[var(--color-ink)]/80 hover:bg-black/5 transition-colors"
+                    >
+                      <Settings size={17} strokeWidth={2} /> Settings
+                    </Link>
+
+                    <div className="h-px bg-black/5 mx-2 my-1" />
+
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false);
+                        signOut();
+                      }}
+                      className="w-full flex items-center gap-3 mx-2 px-2.5 py-2.5 rounded-lg text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
+                      style={{ width: "calc(100% - 1rem)" }}
+                    >
+                      <LogOut size={16} strokeWidth={2} /> Log out
+                    </button>
                   </div>
-
-                  <div className="h-px bg-black/5 mx-2 my-1" />
-
-                  <Link
-                    href="/profile"
-                    onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-3 mx-2 px-2.5 py-2.5 rounded-lg text-sm text-[var(--color-ink)]/80 hover:bg-black/5 transition-colors"
-                  >
-                    <UserIcon size={16} strokeWidth={2} /> Profile
-                  </Link>
-                  <Link
-                    href="/settings"
-                    onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-3 mx-2 px-2.5 py-2.5 rounded-lg text-sm text-[var(--color-ink)]/80 hover:bg-black/5 transition-colors"
-                  >
-                    <Settings size={17} strokeWidth={2} /> Settings
-                  </Link>
-
-                  <div className="h-px bg-black/5 mx-2 my-1" />
-
-                  <button
-                    onClick={() => {
-                      setMenuOpen(false);
-                      signOut();
-                    }}
-                    className="w-full flex items-center gap-3 mx-2 px-2.5 py-2.5 rounded-lg text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
-                    style={{ width: "calc(100% - 1rem)" }}
-                  >
-                    <LogOut size={16} strokeWidth={2} /> Log out
-                  </button>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            </>
           ) : (
             <>
               <Link
@@ -222,14 +238,17 @@ export function Nav() {
                   "rounded-full bg-[var(--color-accent)] text-[var(--color-paper)] hover:bg-[var(--color-accent)]/90 font-medium lowercase flex items-center gap-1.5",
                 )}
               >
-                find your type <ArrowRight size={16} strokeWidth={2} />
+                discover your type <ArrowRight size={16} strokeWidth={2} />
               </Link>
             </>
           )}
         </div>
 
-        {/* Mobile nav: show 4 icons inline; only profile/avatar toggles popup */}
-        <div className="md:hidden flex items-center gap-3">
+        {/* Mobile nav: show 4 icons inline; only profile/avatar toggles popup.
+            "discover your type" is always shown here too, regardless of auth
+            state, since the mobile row never renders the desktop-only
+            Log In / discover your type pair. */}
+        <div className="md:hidden flex items-center gap-2">
           {links && (
             <>
               {/* choose mobile icons: feed (if present) or types, then community, then resources */}
@@ -270,8 +289,19 @@ export function Nav() {
                 });
               })()}
 
+              {/* discover your type — persistent on mobile, logged in or not.
+                  Icon-only (not a text pill) so it sits comfortably among
+                  the other nav icons instead of competing for width. */}
+              <Link
+                href="/quiz"
+                aria-label="Discover your type"
+                className="flex items-center justify-center w-9 h-9 rounded-full bg-[var(--color-accent)] text-[var(--color-paper)] hover:bg-[var(--color-accent)]/90 transition-colors shrink-0"
+              >
+                <Sparkles size={16} strokeWidth={2} />
+              </Link>
+
               {/* profile avatar toggles popup on mobile */}
-              <div className="relative" ref={menuRef}>
+              <div className="relative" ref={mobileMenuRef}>
                 <button
                   onClick={() => setMenuOpen((v) => !v)}
                   className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-black/5 transition-colors"
