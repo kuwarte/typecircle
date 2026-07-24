@@ -3,12 +3,6 @@ import { createClient } from "@/services/supabase/server";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  console.log("URL env:", process.env.NEXT_PUBLIC_SUPABASE_URL);
-  console.log(
-    "KEY env (first 20 chars):",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.slice(0, 20),
-  );
-
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
 

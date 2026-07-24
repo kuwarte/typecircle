@@ -1,9 +1,11 @@
-// FILE: src/app/api/type-insight/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { aiChat } from "@/lib/ai-client";
 import { TYPES } from "@/lib/types-data";
+import { checkDailyLimit, getClientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
+
+const DAILY_LIMIT = 5;
 
 type Body = {
   primary_type: number;
@@ -12,30 +14,32 @@ type Body = {
 };
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  if (!checkDailyLimit(`type-insight:${ip}`, DAILY_LIMIT)) {
+    return NextResponse.json(
+      { error: "Daily limit reached. Try again tomorrow." },
+      { status: 429 },
+    );
+  }
+
   let body: Body;
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
-
   const { primary_type, wing, answers } = body;
-
   if (!primary_type || !wing) {
     return NextResponse.json(
       { error: "Missing primary_type or wing" },
       { status: 400 },
     );
   }
-
   const typeData = TYPES.find((t) => t.n === primary_type);
-
   const answerSummary = Object.entries(answers ?? {})
     .map(([id, value]) => `${id}:${value}`)
     .join(", ");
-
   const system = `You are a precise, grounded Enneagram analyst. You write short, specific personality insights based on someone's actual quiz answers — never vague astrology-style language, never generic filler that could apply to anyone.
-
 Return ONLY valid JSON with this exact shape, nothing else, no markdown fences:
 {
   "summary": string,
@@ -46,20 +50,16 @@ Return ONLY valid JSON with this exact shape, nothing else, no markdown fences:
     "wing": number
   }
 }
-
 Rules for "summary": 2-3 sentences, second person ("you"), specific and concrete, grounded in the answer pattern described, no hedging phrases like "you might" repeated more than once.
-
 Rules for "traits": each is an integer 0-100.
 - "head" = strength of thinking/analysis/planning center
 - "heart" = strength of feeling/image/connection center
 - "body" = strength of instinct/action/gut center
 - "wing" = how strongly the wing type flavors the core type
 Base these on how the answers actually cluster, not just a lookup table for the type number. Vary them meaningfully between people with the same type.`;
-
   const user = `Primary type: ${primary_type}${typeData ? ` (${typeData.name})` : ""}.
 Wing: ${wing}.
 Raw answers (question id: rating 1-5): ${answerSummary || "not provided"}.`;
-
   try {
     const res = await aiChat({
       messages: [
@@ -69,10 +69,8 @@ Raw answers (question id: rating 1-5): ${answerSummary || "not provided"}.`;
       responseFormat: "json_object",
       temperature: 0.6,
     });
-
     const data = await res.json();
     const raw = data?.choices?.[0]?.message?.content ?? "{}";
-
     let parsed: {
       summary?: string;
       traits?: { head?: number; heart?: number; body?: number; wing?: number };
@@ -85,12 +83,10 @@ Raw answers (question id: rating 1-5): ${answerSummary || "not provided"}.`;
         { status: 502 },
       );
     }
-
     const clamp = (n: unknown, fallback: number) =>
       typeof n === "number" && Number.isFinite(n)
         ? Math.max(0, Math.min(100, Math.round(n)))
         : fallback;
-
     return NextResponse.json({
       summary:
         typeof parsed.summary === "string" && parsed.summary.trim()
