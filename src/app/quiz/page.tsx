@@ -703,9 +703,6 @@ export default function QuizPage() {
             className="quiz-step-in flex flex-col items-center justify-center h-full gap-10 max-w-xl mx-auto text-center"
           >
             <div className="w-full">
-              <p className="text-sm font-semibold text-[var(--color-accent)] mb-6">
-                Before you start
-              </p>
               <div className="flex flex-col gap-6 text-left">
                 {ONBOARDING_STEPS.map(({ icon: Icon, title, description }) => (
                   <div

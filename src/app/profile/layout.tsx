@@ -33,13 +33,13 @@ export default function ProfileLayout({
                     className={cn(
                       "flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors",
                       isActive
-                        ? "bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
+                        ? "border border-[var(--color-accent)] bg-[var(--color-accent)]/10 text-[var(--color-accent)]"
                         : "text-[var(--color-ink)]/60 hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-ink)]",
                     )}
                   >
                     <Icon
                       size={16}
-                      strokeWidth={2}
+                      strokeWidth={3}
                       className={
                         isActive
                           ? "text-[var(--color-accent)]"

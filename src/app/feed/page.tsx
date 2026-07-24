@@ -102,11 +102,11 @@ export default async function FeedPage() {
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-8 items-start">
           <div>
             {(!posts || posts.length === 0) && (
-              <div className="rounded-3xl bg-[var(--color-accent)] text-[var(--color-paper)] px-8 py-14">
+              <div className="text-[var(--color-ink)] px-8 py-14">
                 <h2 className="font-heading font-semibold text-3xl tracking-tight">
                   No posts yet.
                 </h2>
-                <p className="mt-3 text-sm text-[var(--color-paper)]/70">
+                <p className="mt-3 text-sm text-[var(--color-ink)]/70">
                   Be the first to share something from your circle.
                 </p>
               </div>

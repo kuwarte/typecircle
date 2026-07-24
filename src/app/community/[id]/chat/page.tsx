@@ -4,6 +4,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "@/services/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -895,9 +896,9 @@ export default function GroupChatPage({
                     i % 3 === 0 ? "items-end" : "items-start"
                   }`}
                 >
-                  <div className="skeleton-shimmer h-2.5 rounded w-16" />
-                  <div
-                    className="skeleton-shimmer rounded-2xl h-9"
+                  <Skeleton className="h-2.5 rounded w-16" />
+                  <Skeleton
+                    className="rounded-2xl h-9"
                     style={{ width: `${45 + ((i * 13) % 30)}%` }}
                   />
                 </div>

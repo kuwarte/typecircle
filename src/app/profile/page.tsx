@@ -1,5 +1,7 @@
 "use client";
 
+import ProfileLoading from "./loading";
+
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/services/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -130,8 +132,7 @@ export default function ProfilePage() {
 
   const initials = form.username?.slice(0, 2).toUpperCase() || "?";
 
-  if (loading)
-    return <div className="text-sm text-[var(--color-ink)]/40">Loading…</div>;
+  if (loading) return <ProfileLoading />;
 
   return (
     <div className="max-w-xl">
